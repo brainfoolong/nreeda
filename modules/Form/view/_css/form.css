@@ -1,0 +1,44 @@
+/**
+ * This file is part of Choqled PHP Framework and/or part of a BFLDEV Software Product.
+ * This file is licensed under "GNU General Public License" Version 3 (GPL v3).
+ * If you find a bug or you want to contribute some code snippets, let me know at http://bfldev.com/nreeda
+ * Suggestions and ideas are also always helpful.
+
+ * @author Roland Eigelsreiter (BrainFooLong)
+ * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
+ * @link http://bfldev.com/nreeda
+**/
+/**
+* Default form css
+*/
+
+.formtable-table{
+    width:100%;
+}
+
+.formtable-block{
+    display: inline-block;
+}
+
+.formtable-table td{
+    padding:4px;
+}
+
+td.formtable-label{
+    width:40%;
+    text-align: right;
+    vertical-align: middle;
+}
+
+td.formtable-field{
+    width:60%;
+    vertical-align: middle;
+}
+
+.formtable-buttons{
+    text-align: center;
+}
+
+.formtable-validation{
+    color:red;
+}
