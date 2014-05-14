@@ -95,7 +95,7 @@ h1 .before{
     text-align: center;
     background: #222222;
     color:white;
-    z-index:3;
+    z-index:99;
 }
 
 #top-message a{
@@ -109,7 +109,8 @@ h1 .before{
     vertical-align: top;
 }
 
-.container.a{
+.container.a,
+.sidebar{
     width:32%;
     text-align: right;
     min-width: 150px;
@@ -131,16 +132,14 @@ h1 .before{
     padding: 15px;
 }
 
-.container.a > .padd{
-    padding: 15px;
-    padding-right: 60px;
-    overflow: hidden;
-}
-
 .logo{
     cursor: pointer;
     font-size: 9px;
     margin-bottom: 10px;
+}
+
+.logo img{
+    max-width: 170px;
 }
 
 .logo span{
@@ -153,6 +152,13 @@ h1 .before{
 
 .sidebar{
     color:white;
+    position: fixed;
+}
+
+.sidebar .padd{
+    padding: 15px;
+    padding-right: 55px;
+    overflow: hidden;
 }
 
 .sidebar a,
@@ -237,9 +243,9 @@ h1 .before{
 }
 
 .sidebar-icons{
-    position: absolute;
+    position: fixed;
     text-align: center;
-    left:-55px;
+    margin-left: -68px;
     color:white;
 }
 
@@ -361,9 +367,16 @@ input.black, select.black, textarea.black{
     cursor: pointer;
     padding:10px;
     font-size: 14px;
-    line-height: 18px;
+    line-height: 20px;
 }
 
+#feeds .entry:hover .feed-options{
+    display: block;
+}
+
+#feeds .feed-options{
+    display: none;
+}
 
 #feeds .entry .float-one{
     display: block;
@@ -416,13 +429,12 @@ input.black, select.black, textarea.black{
     margin-bottom: 8px;
     font-size: 20px;
     line-height: 26px;
-    font-weight: normal;
     letter-spacing: -1px;
 }
 
 #feeds .entry.layout-big{
     font-size: 16px;
-    line-height: 20px;
+    line-height: 24px;
 }
 
 #feeds .entry.layout-big .float-two .inner{

@@ -67,9 +67,9 @@ class RDR_Sidebar extends CHOQ_View{
         <?php }
 
         if($this->getParam("content")){?>
-            <div class="sidebar" id="sidebar">
+            <div class="sidebar" id="sidebar"><div class="padd">
                 <div class="logo">
-                    <img src="<?php echo url()->getByAlias("public", "img/logo-1.png")?>" alt="" width="170"/>
+                    <img src="<?php echo url()->getByAlias("public", "img/logo-1.png")?>" alt="" width="100%"/>
                     <span>v<?php echo RDR_VERSION?></span>
                 </div>
                 <a href="<?php echo l("RDR_Home")?>" class="main"><?php echo t("dashboard")?></a>
@@ -122,7 +122,7 @@ class RDR_Sidebar extends CHOQ_View{
                     <div class="line"><div class="inner"></div></div>
                 <?php }?>
                 <a href="<?php echo l("RDR_Logout")?>" class="main"><?php echo t("sidebar.20")?></a>
-            </div>
+            </div></div>
             <?php
         }
     }
