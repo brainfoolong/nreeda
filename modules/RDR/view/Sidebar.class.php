@@ -57,7 +57,7 @@ class RDR_Sidebar extends CHOQ_View{
                     <div class="box">
                         <h3><?php echo t("sidebar.4")?></h3>
                         <?php $this->showSettingSelect("hideimages", array(0 => ucfirst(t("yes")), 1 =>  ucfirst(t("no"))), t("sidebar.5"))?>
-                        <?php $this->showSettingSelect("layout", array("default" => t("sidebar.6"), "big" => t("sidebar.7"), "headline" => t("sidebar.8")), "Layout")?>
+                        <?php $this->showSettingSelect("layout", array("default" => t("sidebar.6"), "small" => t("sidebar.23"), "big" => t("sidebar.7"), "headline" => t("sidebar.8")), "Layout")?>
                         <div class="clear"></div>
                         <?php $this->showSettingSelect("noautoread", array(0 =>  ucfirst(t("yes")), 1 =>  ucfirst(t("no"))), t("sidebar.9"))?>
                         <div class="clear"></div>

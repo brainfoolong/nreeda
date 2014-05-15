@@ -432,10 +432,22 @@ input.black, select.black, textarea.black{
     letter-spacing: -1px;
 }
 
+#feeds .entry.layout-small{
+    font-size: 13px;
+    line-height: 20px;
+}
+
+#feeds .entry.layout-small h2{
+    font-size: 17px;
+    line-height: 23px;
+}
+
+
 #feeds .entry.layout-big{
     font-size: 16px;
     line-height: 24px;
 }
+
 
 #feeds .entry.layout-big .float-two .inner{
     padding-left: 20px;
@@ -480,7 +492,7 @@ input.black, select.black, textarea.black{
 }
 
 #feeds .entry:hover{
-    background: #fff1ee;
+    background: #f5f5f5;
 }
 
 #feed-view-trigger,
@@ -579,6 +591,10 @@ input.black, select.black, textarea.black{
 
 .spacer{
     padding-bottom: 20px;
+}
+
+.page-rdr-install .content .padd{
+    padding-top: 50px;
 }
 
 .page-rdr-login .content .padd{
