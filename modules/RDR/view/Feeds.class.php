@@ -235,7 +235,7 @@ class RDR_Feeds extends CHOQ_View{
         $favicon = $entry->feed->getFaviconUrl();
         if(user()->setting("layout")) $layout = user()->setting("layout");
 
-        $smallTag = '<div class="small">';
+        $smallTag = '<div class="feed-options small">';
         if(!$readed) $smallTag .= '<span><a href="#" class="readed">'.t("mark.read").'</a> · </span>';
         $smallTag .= '<span><a href="#" class="saved">'.((!$saved) ? t("saveit") : t("remove.save")).'</a> · </span>';
         $smallTag .= '<time datetime="'.$entry->datetime->getUnixtime().'"></time> · ';

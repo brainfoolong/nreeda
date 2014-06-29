@@ -29,7 +29,7 @@ class RDR extends CHOQ_Module{
     public function onInit(){
 
         html()->pageTitle = "nReeda - Web-based Open Source RSS/XML/Atom Feed Reader";
-        define("RDR_VERSION", "1.0.0 beta");
+        define("RDR_VERSION", "1.0.0 beta2");
 
         $devFile = __DIR__."/_RDR.dev.php";
         $localFile = __DIR__."/_RDR.local.php";

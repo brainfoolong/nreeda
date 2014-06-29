@@ -59,6 +59,18 @@ class RDR_BasicFrame extends CHOQ_View{
             user()->updateNewsCache();
             $userData = user()->getAjaxData();
         }
+
+        if(isMobile()){
+            $dir = CHOQ_ACTIVE_MODULE_DIRECTORY."/view";
+            $files = array(
+                "css" => array("{$dir}/_css/mobile.css"),
+                "js" => array()
+            );
+            $name = "mobile";
+            html()->addFileGroupToHead($name, "css", CHOQ_ACTIVE_MODULE_DIRECTORY."/public/static", "static", $files["css"]);
+            html()->addFileGroupToHead($name, "js", CHOQ_ACTIVE_MODULE_DIRECTORY."/public/static", "static", $files["js"]);
+            $bodyClasses[] = "mobile";
+        }
         ?><!DOCTYPE html>
         <?php html()->getOpeningHTMLTag()?>
         <head>
@@ -76,27 +88,11 @@ class RDR_BasicFrame extends CHOQ_View{
         });
         </script>
         <![endif]-->
-        <?php if(isMobile()){?>
-            <style type="text/css">
-            .container.b,
-            .feeds-header{
-                min-width: 450px;
-            }
-            .feeds-header{
-                position: relative;
-            }
-            #feeds{
-                padding-top: 0px;
-            }
-            </style>
-        <?php }?>
         </head>
         <body class="<?php echo implode(" ", $bodyClasses)?>">
             <div id="top-message"></div>
             <div class="container a">
-                <div class="padd">
-                    <?php view("RDR_Sidebar", array("content" => 1))?>
-                </div>
+                <?php view("RDR_Sidebar", array("content" => 1))?>
             </div><div class="container b">
                 <div class="content" id="content">
                     <div class="padd">

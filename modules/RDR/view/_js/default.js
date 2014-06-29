@@ -8,6 +8,8 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
+var scrollDelay = null;
+
 $(document).on("keydown", function(ev){
     // reload feeds
     if(ev.keyCode == 82 && $(ev.target).is("body")){
@@ -27,23 +29,31 @@ $(document).on("keydown", function(ev){
         $(this).removeAttr("datetime");
         $(this).text(f(d.getDate())+"."+f(d.getMonth()+1)+"."+d.getFullYear()+" "+f(d.getHours())+":"+f(d.getMinutes()));
     });
-    $(window).trigger("scroll-delayed");
+    $(window).trigger("update");
     if($("h1").length){
         $("title").text($("h1").first().text());
     }
 });
 
 $(window).on("resize update scroll", function(){
-    var b = $(window).scrollTop() + $(window).height();
-    var h = $(".sidebar").outerHeight() - $(window).height() + 15;
-    var t = $(window).scrollTop();
-    if(h > 0) t -= h;
-    if(t < 0) t = 0;
-    $(".sidebar, .sidebar-icons").stop().animate({marginTop : t});
-
+    if(!$("body").hasClass("mobile")){
+        var sh = $(".sidebar").outerHeight() + 15;
+        var wh = $(window).height();
+        if(sh > wh){
+            var h = sh - wh;
+            var t = $(window).scrollTop();
+            if(h < t) t = h;
+            $(".sidebar").stop().animate({marginTop : -t});
+        }else{
+            $(".sidebar").stop().animate({marginTop : 0});
+        }
+    }
     $(".container").css("min-height", Math.max($(window).height(), $(".sidebar").outerHeight(), $(".content").outerHeight())+"px");
     $(".container.c").width($(window).width() - $(".container.a").outerWidth() - $(".container.b").outerWidth());
-    $(window).trigger("scroll-delayed");
+    clearTimeout(scrollDelay);
+    scrollDelay = setTimeout(function(){
+        $(window).trigger("scroll-delayed");
+    }, 500);
     $(".parent-width").each(function(){
         var sub = 0;
         if($(this).attr("data-sub")) sub = parseInt($(this).attr("data-sub"));
@@ -51,7 +61,6 @@ $(window).on("resize update scroll", function(){
     });
 });
 
-var scrollDelay = null;
 $(window).on("scroll-delayed", function(){
     var h = $(window).height();
     var scroll = $(window).scrollTop();
@@ -67,12 +76,11 @@ $(window).on("scroll-delayed", function(){
             entries.push(e.attr("data-id"));
             $(this).remove();
         }
-        if(index+1 === size && entries.length){
-            API.req("set-entries-readed", {ids : entries}, Global.updateNewsCache);
-        }
     });
-
-}).trigger("scroll-delayed");
+    if(entries.length){
+        API.req("set-entries-readed", {ids : entries}, Global.updateNewsCache);
+    }
+});
 
 $(window).on("scroll", function(){
     var h = $(window).height();
@@ -92,10 +100,6 @@ $(window).on("scroll", function(){
             $(this).remove();
         }
     });
-    clearTimeout(scrollDelay);
-    scrollDelay = setTimeout(function(){
-        $(window).trigger("scroll-delayed");
-    }, 500);
 });
 
 /**

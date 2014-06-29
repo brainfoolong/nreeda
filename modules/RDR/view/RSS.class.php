@@ -39,35 +39,49 @@ class RDR_RSS extends CHOQ_View{
                     $channel->addChild("pubDate", dt("now")->format("r"));
 
                     $feeds = user()->getFeeds();
-                    $catCount = array();
+                    $catCount = $feedCount = array();
                     $count = 0;
                     $allEntries = array();
-                    foreach($feeds as $feed){
-                        $feedCount = 0;
-                        if(in_array($feed->getId(), $feedIds)){
+                    $offset = 0;
+                    $limit = 50;
+                    while(true){
+                        $entries = db()->getByCondition(
+                            "RDR_Entry", "feed IN {0} && id > {1}",
+                            array($feeds, (int)user()->setting("init.entry")),
+                            array("-datetime", "-id"),
+                            $limit,
+                            $offset
+                        );
+                        $offset += $limit;
+                        if(!$entries) break;
+                        user()->loadReadedFlags(array_keys($entries));
+                        foreach($entries as $entry){
+                            if(isset(user()->_cacheReaded[$entry->getId()])) continue;
+                            if($count >= $max) break 2;
+
+                            $feed = $entry->feed;
                             $category = user()->getCategoryToFeed($feed);
+                            $feedId = $feed->getId();
                             $catId = $category->getId();
-                            if(!isset($catCount[$category->getId()])) $catCount[$catId] = 0;
-                            $entries = db()->getByCondition("RDR_Entry", "feed = {0}", array($feed), "-datetime", min(array($feedmax, $max - $count, $catmax - $catCount[$catId])));
-                            user()->loadReadedFlags(array_keys($entries));
-                            foreach($entries as $entry){
-                                if(isset(user()->_cacheReaded[$entry->getId()])) continue;
-                                if($count >= $max) break 2;
-                                if($feedCount >= $feedmax) continue 2;
-                                if($catCount[$catId] >= $catmax) continue 2;
+                            if(!isset($catCount[$catId])) $catCount[$catId] = 0;
+                            if(!isset($feedCount[$feedId])) $feedCount[$feedId] = 0;
 
-                                $entry->category = $category;
-                                $entry->time = $entry->datetime->getUnixtime();
-                                $allEntries[] = $entry;
-
-                                $feedCount++;
-                                $count++;
-                                $catCount[$catId]++;
+                            if($feedCount[$feedId] >= $feedmax) {
+                                if(isset($feeds[$feedId])) unset($feeds[$feedId]);
+                                continue;
                             }
+                            if($catCount[$catId] >= $catmax) continue;
+
+                            $entry->category = $category;
+                            $entry->time = $entry->datetime->getUnixtime();
+                            $allEntries[] = $entry;
+
+                            $feedCount[$feedId]++;
+                            $catCount[$catId]++;
+                            $count++;
                         }
                     }
 
-                    arraySortProperty($allEntries, "time", SORT_DESC);
                     foreach($allEntries as $entry){
                         $feed = $entry->feed;
                         $category = $entry->category;

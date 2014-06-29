@@ -155,7 +155,7 @@ class RDR_User extends CHOQ_DB_Object{
             FROM RDR_Entry as t0
             JOIN RDR_Category_feeds as t1 ON t1.o IN ".db()->toDb($categories)." AND  t1.k = t0.feed
             WHERE t0.id > ".(int)$this->setting("init.entry")."
-            ORDER BY datetime DESC
+            ORDER BY datetime DESC, id DESC
         ";
         session("entry.cache", db()->fetchAsAssoc($query, "id"));
     }
