@@ -277,14 +277,23 @@ function cookie($key, $value = NULL, $expire = 0){
 
 /**
 * Get/Set a $_SESSION value
-* Session is hi-jack protected via unique browser string and ip
+* Session is hi-jack protected and protected against corrupt session ids
 *
 * @param string $key
 * @param string $value The value to set
 * @return mixed
 */
 function session($key, $value = NULL){
+    if(defined("CHOQ_SESSIONID_CORRUPT") && CHOQ_SESSIONID_CORRUPT) return;
     if(session_id() === "") {
+        # check for session id to be correct
+        # if not skip activating the session
+        $sessionName = session_name();
+        $sessionId = isset($_COOKIE[$sessionName]) ? $_COOKIE[$sessionName] : NULL;
+        if($sessionId !== NULL && (strlen($sessionId) < 22 || strlen($sessionId) > 40 || preg_match("~[^a-zA-Z0-9,\-]~i", $sessionId))){
+            define("CHOQ_SESSIONID_CORRUPT", true);
+            return;
+        }
         session_start();
         $currentUid = md5(
             req()->getIp()

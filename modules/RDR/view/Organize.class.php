@@ -101,7 +101,7 @@ class RDR_Organize extends CHOQ_View{
                     if(post("feed")){
                         $feed = arrayValue($feeds, post("feed"));
                         if($feed){
-                            $category->add("feedsData", post("val"), $feed->getId()."-name");
+                            $feed->setCustomName($category, post("val"));
                             $category->store();
                         }
                         return;
@@ -121,7 +121,7 @@ class RDR_Organize extends CHOQ_View{
                             $categoryOld->remove("feedsData", $feed->getId()."-name");
                             $categoryOld->remove("feeds", $feed->getId());
                             $categoryOld->store();
-                            $categoryNew->add("feedsData", $name, $feed->getId()."-name");
+                            $feed->setCustomName($categoryNew, $name);
                             $categoryNew->add("feeds", $feed);
                             $categoryNew->store();
                         }

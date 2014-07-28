@@ -27,7 +27,8 @@ class RDR_BasicFrame extends CHOQ_View{
             redirect(l("RDR_Install"), 302);
         }else{
             if(!user() && RDR::$isInstalled && !$view instanceof RDR_Login){
-                redirect(l("RDR_Login"), 302);
+                $url = url()->getUri();
+                redirect(l("RDR_Login")."?redirect=".urlencode($url), 302);
             }else{
                 $view->getContent();
             }

@@ -195,6 +195,26 @@ class CHOQ_DateTime{
     }
 
     /**
+    * Get dayname in self::$timezone
+    *
+    * @param mixed $short Get short dayname if set to true
+    * @param mixed $language Override current active language
+    */
+    public function getDayName($short = false, $language = NULL){
+        return t("datetime.day".($short ? 'short' : '').".".$this->getDay(), $language);
+    }
+
+    /**
+    * Get monthname in self::$timezone
+    *
+    * @param mixed $short Get short dayname if set to true
+    * @param mixed $language Override current active language
+    */
+    public function getMonthName($short = false, $language = NULL){
+        return t("datetime.month".($short ? 'short' : '').".".$this->getMonth(), $language);
+    }
+
+    /**
     * Modify the current time with the given modifier
     * Alias for strtotime("TIME_OF_INSTANCE $modifier")
     *

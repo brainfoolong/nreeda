@@ -25,6 +25,9 @@ function FormTable(container){
     this.validateAllFields = function(){
         var result = true;
         this.container.find("input, textarea, select").each(function(){
+            if($(this).attr("name") == "submit"){
+                if(typeof console != "undefined") console.error("A field's name attribute is called 'submit' - This will result in problems, rename it");
+            }
             var instance = $(this).data("formtablefield");
             if(instance){
                 if(!instance.validate()) result = false;

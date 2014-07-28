@@ -56,14 +56,17 @@ class RDR extends CHOQ_Module{
             CHOQ_View::mapViewToUrl("RDR_Settings", "/index.php/settings");
             CHOQ_View::mapViewToUrl("RDR_Login", "/index.php/login");
             CHOQ_View::mapViewToUrl("RDR_RSS", "/index.php/rss");
+            CHOQ_View::mapViewToUrl("RDR_BrowserScript", "/index.php/browser-script.js");
         }else{
             CHOQ_View::mapViewToUrl("RDR_Install", "/index.php/install");
         }
 
         $baseUrl = dirname(arrayValue($_SERVER, "PHP_SELF"));
         if(substr($baseUrl, -9) == "index.php") $baseUrl = dirname($baseUrl);
-        url()->addAlias("base", $baseUrl);
         url()->setUriPrefix($baseUrl);
+        url()->addAlias("root", (req()->isHttps() ? "https" : "http")."://".req()->getHost());
+        url()->addAlias("base", $baseUrl);
+
 
         if(self::$isInstalled) include($localFile);
         if(file_exists($devFile)) include($devFile);

@@ -79,7 +79,7 @@ class CHOQ_Exception extends Exception{
             default:
                 $message = ("PHP Undefined Error ($errno): $line");
         }
-        self::exceptionHandler(new $class($message));
+        error($message);
     }
 
     /**

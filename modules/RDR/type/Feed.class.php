@@ -94,7 +94,18 @@ class RDR_Feed extends CHOQ_DB_Object{
     }
 
     /**
-    * Get custom name for a specific category
+    * Set custom name for a specific user category
+    *
+    * @param RDR_Category $category
+    * @param string $name
+    */
+    public function setCustomName(RDR_Category $category, $name){
+        $key = $this->getId()."-name";
+        $category->add("feedsData", $name, $key);
+    }
+
+    /**
+    * Get custom name for a specific user category
     *
     * @param RDR_Category $category
     * @return string

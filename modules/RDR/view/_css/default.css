@@ -249,6 +249,13 @@ h1 .before{
     color:white;
 }
 
+.sidebar-icons a,
+.sidebar-icons a:visited,
+.sidebar-icons a:link{
+    color:#FF3000;
+}
+
+
 .sidebar-icons.opened{
     z-index: 4;
     background: #222222;
@@ -321,6 +328,12 @@ input, select, textarea{
     margin-bottom: 5px;
     font-family: open sans, arial, helvetica;
     font-weight: 300;
+}
+
+input[type='checkbox'],
+input[type='radio']{
+    padding: 0px;
+    border: none;
 }
 
 input.black, select.black, textarea.black{

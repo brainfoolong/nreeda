@@ -32,7 +32,12 @@ class RDR_Login extends CHOQ_View{
         if(post("login")){
             v("message", t("login.1"));
             $user = RDR_User::login(post("username"), post("password"), post("remember"));
-            if($user) redirect(l("RDR_Home"), 302);
+            if($user) {
+                if(get("redirect")){
+                    redirect(get("redirect"));
+                }
+                redirect(l("RDR_Home"), 302);
+            }
         }
         ?>
 

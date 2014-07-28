@@ -40,6 +40,9 @@ class RDR_Sidebar extends CHOQ_View{
                         </select><br/>
                         <input type="button" class="btn add-feed" value="<?php echo t("sidebar.1")?>"/>
                         <input type="button" class="btn" value="<?php echo t("sidebar.2")?>" onclick="window.location.href = '<?php echo l("RDR_Organize")?>'"/>
+                        <div class="spacer">
+                            <?php echo t("sidebar.24")?> <a href="<?php echo l("RDR_BrowserScript")?>"><?php echo t("sidebar.25")?></a>
+                        </div>
                     </div>
                 </div>
                 <div id="search-toggle" class="icon-box toggle">
