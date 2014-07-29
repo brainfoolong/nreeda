@@ -62,7 +62,6 @@ class RDR_BrowserScript extends CHOQ_View{
             ?>
             <form name="d" method="post" action="">
             <p>
-            <?php echo t("browserscript.close")?><br/><br/>
             <?php
             $categories = user()->getCategories();
             foreach($feeds as $id => $feed){
