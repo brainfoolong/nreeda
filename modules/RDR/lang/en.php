@@ -188,4 +188,5 @@ $translations = array(
     "browserscript.info" => "nReeda gives you a powerfull tool to add feeds from other sites with just a few clicks. It will list all available feeds on a page and you can save it with one click to your nReeda account.",
     "browserscript.bookmark" => "Save the following URL in your favorites / bookmarks. If you be on a page that you want to subscribe you just need click on the saved bookmark.",
     "browserscript.nofeed" => "No feeds found on this page",
+    "browserscript.forward" => "%s Feeds found on this page - Add to nReeda now?",
 );

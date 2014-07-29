@@ -182,4 +182,5 @@ $translations = array(
     "browserscript.info" => "nReeda stellt dir ein Browser Script bereit das dir beim Surfen auf anderen Seiten mehr Komfort bietet. Damit kannst du, sobald ein RSS/Atom Feed auf einer Seite erkannt wird, mit nur einem Klick den Feed der Seite zu deinen Feeds in nReeda hinzufügen.",
     "browserscript.bookmark" => "Speichere dir einfach diesen Link als Bookmark / Favorit ab. Wenn du dann auf einer Seite diesen Link öffnest werden automatisch alle Feeds erkannt, aufgelistet und du kannst mit nur einem Klick die Feeds zu deiner Sammlung hinzufügen.",
     "browserscript.nofeed" => "Keine Feeds auf dieser Seite gefunden",
+    "browserscript.forward" => "Es wurden %s Feeds gefunden - zu nReeda hinzufügen?",
 );

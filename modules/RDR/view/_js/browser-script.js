@@ -9,17 +9,12 @@
  * @link http://bfldev.com/nreeda
 **/
 (function(){
-    var exist = document.getElementById("nreeda-frame");
-    if(exist){
-        exist.parentNode.removeChild(exist);
-        return;
-    }
     var nreedaUrl = "{url}";
     var linkTags = document.getElementsByTagName("link");
     var feeds = "";
     var site = window.location.host;
     nreedaUrl += "?site="+site;
-    var found = false;
+    var found = 0;
     for(var i in linkTags){
         var tag = linkTags[i];
         if(typeof tag.getAttribute != "function") continue;
@@ -29,26 +24,18 @@
         var title = tag.getAttribute("title") || href;
         if(rel && type && rel.match(/alternate/i) && type.match(/application.*(atom|rss)/i)){
             nreedaUrl += "&feed[]="+encodeURIComponent(href)+";"+encodeURIComponent(title);
-            found = true;
+            found++;
         }
     }
     if(!found){
         alert("{nofeed}");
     }else{
-        (function(){
-            var d=document, g=d.createElement("iframe"), s=d.getElementsByTagName("body")[0];
-            g.src=nreedaUrl;
-            g.id = "nreeda-frame";
-            g.style.position = "fixed";
-            g.style.zIndex = "2147483646";
-            g.style.border = "5px solid white";
-            g.style.top = "10%";
-            g.style.left = "10%";
-            g.style.width = "80%";
-            g.style.height = "80%";
-            g.frameborder = "0";
-            g.scrolling = "auto";
-            s.appendChild(g)
-        })();
-    }}
-)();
+        if(confirm("{forward}".replace(/\%s/ig, found))){
+            var w = parseInt(screen.width * 0.8);
+            var h = parseInt(screen.height * 0.7);
+            var l = parseInt((screen.width / 2) - (w / 2));
+            var t = parseInt((screen.height / 2) - (h / 2));
+            window.open(nreedaUrl, "_blank", "width="+w+", height="+h+", top="+t+", left="+l+", resizable=yes, scrollbars=yes");
+        }
+    }
+})();

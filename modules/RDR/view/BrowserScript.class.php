@@ -53,7 +53,7 @@ class RDR_BrowserScript extends CHOQ_View{
                 ?>
                 <p><?php echo implode("<br/>", $message)?></p>
                 <p><?php echo t("browserscript.close")?></p>
-                <?php 
+                <?php
                 return;
             }
 
@@ -63,7 +63,7 @@ class RDR_BrowserScript extends CHOQ_View{
             <form name="d" method="post" action="">
             <p>
             <?php echo t("browserscript.close")?><br/><br/>
-            <?php 
+            <?php
             $categories = user()->getCategories();
             foreach($feeds as $id => $feed){
                 $exp = explode(";", $feed, 2);
@@ -80,13 +80,13 @@ class RDR_BrowserScript extends CHOQ_View{
                     <?php }?>
                 </select>
                 <a href="<?php echo urldecode($exp[0])?>" target="_blank"><?php echo urldecode($exp[1])?></a><br/>
-                <?php 
+                <?php
             }
             ?><br/>
             <input type="submit" name="save" class="btn" value="<?php echo t("browserscript.addfeeds.btn")?>"/>
             </p>
             </form>
-            <?php 
+            <?php
             return;
         }
 
@@ -95,18 +95,19 @@ class RDR_BrowserScript extends CHOQ_View{
         $script = preg_replace("~\s{2,99}~", "", $script);
         $script = str_replace("{url}", url()->getByAlias("root", l($this)), $script);
         $script = str_replace("{nofeed}", t("browserscript.nofeed"), $script);
+        $script = str_replace("{forward}", t("browserscript.forward"), $script);
         $script = "javascript:".$script;
 
         headline(t("sidebar.25"));
         ?>
         <p><?php echo t("browserscript.info")?></p>
-        <?php 
+        <?php
         headline(t("browserscript.use"));
         ?>
         <p><?php echo t("browserscript.bookmark")?><br/><br/>
 
         <a href='<?php echo $script?>'><?php echo s($script)?></a>
         </p>
-        <?php 
+        <?php
     }
 }
