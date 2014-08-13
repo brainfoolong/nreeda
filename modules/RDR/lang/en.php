@@ -28,6 +28,9 @@ $translations = array(
     "event.10" => "OPML successfully imported",
     "event.11" => "Feed {FEED} successfully added",
     "event.12" => "File successfully imported",
+    "event.13" => "%s old news entries deleted",
+    "event.14" => "%s old eventlog entries deleted",
+    "event.15" => "%s feeds have been deleted because nobody have it in use anymore",
     "uncategorized" => "Uncategorized",
     "user.1" => "Administrator",
     "user.2" => "User",
@@ -66,6 +69,7 @@ $translations = array(
     "note.settings" => "Customize your reader, click the settings icon on the top right of your sidebar!",
     "dashboard.eventlog" => "Event Log - For Admins",
     "dashboard.clearlog" => "Clear Log",
+    "dashboard.errorlog" => "Application Error Log",
     "reader.installed" => "Reader already installed",
     "install.folder.notexist" => "Folder '%s' does not exist - You must create it",
     "install.folder.writeable" => "Folder '%s' is not writeable - Set correct CHMOD or remove write protection",
@@ -150,18 +154,11 @@ $translations = array(
     "years" => "Year/s",
     "days" => "Day/s",
     "weeks" => "Week/s",
-    "admin.update.1" => "Automated Feed Update",
-    "admin.update.2" => 'To automate your feed update process you need to call a specific update URL periodically.
-            You can do this with tasks or "cronjobs".
-            If you don\'t have access to such system relevent tools you can use some free services as well.
-            Here is a list of services that allow you to manage tasks free and online: %s
-
-            Your URL for automatic updates (Notice: This URL changes when you move your installation folder of the reader)
-            %s
-
-            It is highly recommended to choose a period higher than 5 minutes because when you have much feeds added, the update requires more time than one period has. This will result in conflicts and server lags.
-
-            A example cronjob (linux) that we recommend:',
+    "admin.update.cron.title" => "Console Cronjob for updates (Recommended)",
+    "admin.update.cron.text" => "To update your news periodically it is required to set up a cronjob (Tasks in Windows). We recommend the console cronjob because it's independent from your webserver. This cronjob can only be setup via command line. If you don't have access to your OS command line you can use the alternative webcron bellow.
+            Here is a recommended cronjob command for linux:",
+    "admin.update.webcron.title" => "Web Cronjob for updates (Alternative)",
+    "admin.update.webcron.text" => "If you cannot setup a console cronjob for some reason you can use this web cronjob as well. Webcron means to call a URL periodically. We recommend an interval higher or equal 10 minutes. To fast intervals may result in update conflicts. The URL for the webcron is a follows. If you don't have the possibility to setup a cronjob on your system you can use free services as well, for example: setcronjob.com",
     "admin.update.3" => "Update feeds manually",
     "admin.update.4" => "If you want to, you can update every single feed manually",
     "admin.update.5" => "Update all feeds",

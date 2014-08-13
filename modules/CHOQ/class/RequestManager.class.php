@@ -132,6 +132,7 @@ class CHOQ_RequestManager{
     */
     public function isAjax(){
         $headers = $this->getHeaders();
+        if(!$headers) return false;
         if(array_search(strtolower("XMLHttpRequest"), $headers) !== false){
             return true;
         }

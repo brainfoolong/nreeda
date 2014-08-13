@@ -35,6 +35,9 @@ class RDR_Event extends CHOQ_DB_Object{
     const TYPE_OPML_OK = 10;
     const TYPE_FEED_ADD_OK = 11;
     const TYPE_FILE_OK = 12;
+    const TYPE_CLEANUP_ENTRY = 13;
+    const TYPE_CLEANUP_EVENT = 14;
+    const TYPE_CLEANUP_FEEDS = 15;
 
     /**
     * The last create event

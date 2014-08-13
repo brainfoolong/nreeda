@@ -138,6 +138,7 @@ class RDR_User extends CHOQ_DB_Object{
     public function updateNewsCache(){
         $feeds = $this->getFeeds();
         $categories = $this->getCategories();
+        session("entry.cache", false);
         if(!$feeds) return;
 
         $lowestId = db()->fetchOne("

@@ -20,7 +20,7 @@ class RDR_Exception extends Exception{
     * Display the exception html
     */
     public function getHtml(){
-        if(req()->isAjax()){
+        if(req()->isAjax() || PHP_SAPI == "cli"){
             echo $this->getMessage()."\n\n".$this->getTraceAsString();
             return;
         }
@@ -36,6 +36,6 @@ class RDR_Exception extends Exception{
             <pre><?php echo $this->getTraceAsString()?></pre>
         </body>
         </html>
-        <?php 
+        <?php
     }
 }

@@ -48,18 +48,6 @@ class RDR_Feed extends CHOQ_DB_Object{
     }
 
     /**
-    * Delete feeds that not have a reference anymore
-    */
-    static function deleteUnusedFeeds(){
-        $feeds = db()->getByQuery("RDR_Feed", "
-            SELECT t0.id FROM RDR_Feed as t0
-            LEFT JOIN RDR_Category_feeds as t1 ON t1.v = t0.id
-            WHERE t1.id IS NULL
-        ");
-        db()->deleteMultiple($feeds);
-    }
-
-    /**
     * Get url to locally stored favicon
     *
     * @return string | NULL
@@ -138,5 +126,6 @@ class RDR_Feed extends CHOQ_DB_Object{
             }
         }
         parent::delete();
+        RDR_Cleanup::cleanupFlags();
     }
 }

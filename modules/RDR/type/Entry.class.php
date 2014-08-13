@@ -67,17 +67,4 @@ class RDR_Entry extends CHOQ_DB_Object{
         $object->uniqueId = $uniqueId;
         return $object;
     }
-
-    /**
-    * Old entries will be deleted automatically with this cleanup
-    */
-    static function cleanup(){
-        $time = RDR_Setting::get("maxentrylifetime")->value;
-        if(!$time) return;
-        while(true){
-            $tmp = db()->getByCondition(__CLASS__, "datetime < {0}", array(dt("now $time")), NULL, 1000);
-            if(!$tmp) break;
-            db()->deleteMultiple($tmp);
-        }
-    }
 }

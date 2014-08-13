@@ -104,10 +104,10 @@ class RDR_Organize extends CHOQ_View{
                             $feed->setCustomName($category, post("val"));
                             $category->store();
                         }
-                        return;
+                    }else{
+                        $category->name = post("val");
+                        $category->store();
                     }
-                    $category->name = post("val");
-                    $category->store();
                 }
             }
             if(post("action") == "move"){
@@ -137,13 +137,15 @@ class RDR_Organize extends CHOQ_View{
                             $category->remove("feedsData", $feed->getId()."-name");
                             $category->remove("feeds", $feed);
                             $category->store();
-                            RDR_Feed::deleteUnusedFeeds();
                         }
-                        return;
+                    }else{
+                        $category->delete();
                     }
-                    $category->delete();
                 }
             }
+            RDR_Cleanup::cleanupFeeds();
+            RDR_Cleanup::cleanupFlags();
+            user()->updateNewsCache();
             return;
         }
 

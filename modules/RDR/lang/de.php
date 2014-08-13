@@ -27,6 +27,9 @@ $translations = array(
     "event.10" => "OPML erfolgreich importiert",
     "event.11" => "Feed {FEED} erfolgreich hinzugefügt",
     "event.12" => "Datei erfolgreich importiert",
+    "event.13" => "%s alte News Einträge wurden gelöscht",
+    "event.14" => "%s alte Eventlog Einträge wurden gelöscht",
+    "event.15" => "%s Feeds wurden gelöscht da sie von niemanden mehr gebraucht werden",
     "uncategorized" => "Nicht kategorisiert",
     "user.1" => "Administrator",
     "user.2" => "Benutzer",
@@ -145,18 +148,11 @@ $translations = array(
     "years" => "Jahr/e",
     "days" => "Tag/e",
     "weeks" => "Woche/n",
-    "admin.update.1" => "Automatisches Feed Update",
-    "admin.update.2" => 'Um den Update Prozess zu automatisieren ist es nötig eine bestimmte URL immer wieder aufzurufen.
-            Das wird üblicherweise mit sogenannten Aufgaben(Windows) oder Cronjobs(Linux) gemacht.
-            Falls sie keinen Zugang zu solchen Funktionen in ihrem System haben können sie auch kostenlose Online Services nutzen.
-            Hier ist eine Liste solcher Services: %s
-
-            Ihre URL für den Update Prozess lautet wie folgt (Hinweis: Diese URL ändert sich sobald sie den Reader im Dateisystem verschieben)
-            %s
-
-            Es wird ausdrücklich empfohlen nicht öfter als alle 5 Minuten ein Update auszuführen um Überlagerungen im Update Prozess zu vermeiden.
-
-            Ein empfohlenes Beispiel für einen Cronjob in Linux:',
+    "admin.update.cron.title" => "Console Cronjob für Updates (Empfohlen)",
+    "admin.update.cron.text" => "Um News in regelmäßigen Abständen zu holen muss dafür ein Cronjob (unter Windows Aufgabenplanung) eingerichtet werden. Empfohlen wird der Console Cronjob da er unabhängig vom Webserver arbeitet. Dieser Cronjob kann nur eingerichtet werden wenn sie Zugriff auf die Kommandozeile ihres System haben. Falls sie nur ein einfaches Webhosting Paket haben sehen sie sich den alternativen Web Cronjob unterhalb an.
+            Ein empfohlenes Beispiel für einen Cronjob in Linux:",
+    "admin.update.webcron.title" => "Web Cronjob für Updates (Alternative)",
+    "admin.update.webcron.text" => "Falls sie den oben genannten Console Cronjob nicht einrichten können, können sie alternativ in regelmäßigen Abständen eine bestimmte URL abrufen lassen. Wir empfehlen einen Interval von maximal alle 10 Minuten oder länger. Zu kurze Intervalle können zu Überlagerungen führen. Folgende URL wird dafür benötigt. Falls sie keine Möglichkeit haben auf ihrem System Aufgaben oder Cronjobs einzurichten so gibt es dafür kostenlose Alternativen wie zb.: setcronjob.com",
     "admin.update.3" => "Feeds manuell aktualisieren",
     "admin.update.4" => "Falls nötig kann man Feeds auch immer manuell aktualisieren",
     "admin.update.5" => "Alle Feeds aktualisieren",

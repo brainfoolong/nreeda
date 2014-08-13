@@ -42,11 +42,20 @@ class RDR_Admin_Update extends CHOQ_View{
     * Get content
     */
     public function getContent(){
-        headline(t("admin.update.1"));
+        headline(t("admin.update.cron.title"));
         ?>
         <div class="indent">
-            <?php echo nl2br(sprintf(t("admin.update.2"), '<a href="https://www.setcronjob.com" target="_blank">setcronjob.com</a>', '<a href="'.RDR_Cron::getLink().'" target="_blank"><b>'.RDR_Cron::getLink().'</b></a>'))?><br/>
-            <code style="font-size: 11px;">*/10 * * * * wget -O- "<?php echo RDR_Cron::getLink()?>"</code>
+            <?php echo nl2br(t("admin.update.cron.text"))?><br/>
+            <code style="font-size: 11px;">*/10 * * * * php -f <?php echo escapeshellarg(CHOQ_ROOT_DIRECTORY.DIRECTORY_SEPARATOR."console.php")?> <?php echo escapeshellarg("cron")?></code>
+        </div>
+        <div class="spacer"></div>
+
+        <?php
+        headline(t("admin.update.webcron.title"));
+        ?>
+        <div class="indent">
+            <?php echo nl2br(t("admin.update.webcron.text"))?><br/>
+            <code style="font-size: 11px;"><a href="<?php echo RDR_Cron::getLink()?>" target="_blank"><?php echo RDR_Cron::getLink()?></a></code>
         </div>
         <div class="spacer"></div>
 

@@ -142,7 +142,8 @@ class RDR_Feeds extends CHOQ_View{
                         }
                     }
                 }
-                user()->loadReadedFlags($ids);
+                # load readed flags only if required
+                if($this->readedLayoutEnabled) user()->loadReadedFlags($ids);
                 # if view all and no article exist, update init entry to latest read id
                 if($pType == "all" && !$ids){
                     if($feeds){

@@ -30,6 +30,10 @@ class RDR_Home extends CHOQ_View{
                         db()->deleteMultiple($logs);
                     }
                 }
+                if(post("clearerrorlog")){
+                    $file = CHOQ_ACTIVE_MODULE_DIRECTORY."/logs/error.log";
+                    if(file_exists($file)) unlink($file);
+                }
             }
             return;
         }
@@ -90,6 +94,7 @@ class RDR_Home extends CHOQ_View{
                     </div>
                 <?php }?>
             </div>
+            <div class="spacer"></div>
             <script type="text/javascript">
             $("#eventlog input.btn").on("click", function(){
                 $.post(window.location.href, {clearlog : 1});
@@ -97,6 +102,22 @@ class RDR_Home extends CHOQ_View{
             });
             </script>
             <?php
+            $file = CHOQ_ACTIVE_MODULE_DIRECTORY."/logs/error.log";
+            if(file_exists($file) && filesize($file)){
+                headline(t("dashboard.errorlog"));
+                ?>
+                <div id="errorlog">
+                    <input type="button" class="btn" value="<?php echo t("dashboard.clearlog")?>"/>
+                    <pre style="font-size:11px; overflow:auto; max-height:400px;"><code><?php echo s(file_get_contents($file))?></code></pre>
+                </div>
+                <script type="text/javascript">
+                $("#errorlog input.btn").on("click", function(){
+                    $.post(window.location.href, {clearerrorlog : 1});
+                    $("#errorlog").remove();
+                });
+                </script>
+                <?php
+            }
         }
     }
 }

@@ -72,7 +72,7 @@ class RDR_Sidebar extends CHOQ_View{
         if($this->getParam("content")){?>
             <div class="sidebar" id="sidebar"><div class="padd">
                 <div class="logo">
-                    <img src="<?php echo url()->getByAlias("public", "img/logo-1.png")?>" alt="" width="100%"/>
+                    <a href="<?php l("RDR_Home")?>"><img src="<?php echo url()->getByAlias("public", "img/logo-1.png")?>" alt="" width="100%"/></a>
                     <span>v<?php echo RDR_VERSION?></span>
                 </div>
                 <a href="<?php echo l("RDR_Home")?>" class="main"><?php echo t("dashboard")?></a>

@@ -63,7 +63,7 @@ class RDR_Category extends CHOQ_DB_Object{
     */
     public function store(){
         parent::store();
-        RDR_Feed::deleteUnusedFeeds();
+        RDR_Cleanup::cleanupFeeds();
     }
 
     /**
@@ -71,6 +71,6 @@ class RDR_Category extends CHOQ_DB_Object{
     */
     public function delete(){
         parent::delete();
-        RDR_Feed::deleteUnusedFeeds();
+        RDR_Cleanup::cleanupFeeds();
     }
 }

@@ -35,13 +35,17 @@ class RDR_Cron extends CHOQ_View{
     */
     public function onLoad(){
         if(!RDR::$isInstalled) return;
+        # set time limit to max 10 minutes
+        # if this limit is reached than the script stops and continue at next cron
+        set_time_limit(600);
+
         $param = $this->getParam("param");
         if($param != self::getHash()) die("Not allowed");
         RDR_Event::log(RDR_Event::TYPE_CRON_START);
         RDR_Import::updateAllFeeds();
         RDR_Event::log(RDR_Event::TYPE_CRON_END);
-        RDR_Event::cleanup();
-        RDR_Entry::cleanup();
+        RDR_Cleanup::cleanupEvents();
+        RDR_Cleanup::cleanupEntries();
         $generator = CHOQ_DB_Generator::create(db());
         if($generator instanceof CHOQ_DB_Generator_Mysql){
             $generator->addModule("RDR");
