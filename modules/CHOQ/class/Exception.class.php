@@ -105,13 +105,15 @@ class CHOQ_Exception extends Exception{
             $dir = CHOQ_ACTIVE_MODULE_DIRECTORY.DS."logs";
             if(is_dir($dir) && is_writable($dir)){
                 $count = 0;
-                $file = $dir.DS."error.log";
-                if(file_exists($file) && filesize($file) > 1024 * 1024 * 20){
-                    rename($file, $file.".".time());
+                $fileBase = $dir.DS."error.log";
+                $filePHP = $fileBase.".php";
+                if(file_exists($filePHP) && filesize($filePHP) > 1024 * 1024 * 20){
+                    rename($filePHP, $fileBase.".".time().".php");
                 }
+                if(!file_exists($filePHP)) file_put_contents($filePHP, "<?php\nif(!defined(\"CHOQ\")) die();\n?>\n\n");
                 $message = "[".date("d.m.Y H:i:s")."] ".$exception->getMessage()."\n";
                 $message .= $exception->getTraceAsString()."\n===============\n";
-                file_put_contents($file, $message, FILE_APPEND);
+                file_put_contents($filePHP, $message, FILE_APPEND);
             }
         }
         die();

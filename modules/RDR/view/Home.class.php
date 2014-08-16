@@ -31,7 +31,7 @@ class RDR_Home extends CHOQ_View{
                     }
                 }
                 if(post("clearerrorlog")){
-                    $file = CHOQ_ACTIVE_MODULE_DIRECTORY."/logs/error.log";
+                    $file = CHOQ_ACTIVE_MODULE_DIRECTORY."/logs/error.log.php";
                     if(file_exists($file)) unlink($file);
                 }
             }
@@ -102,13 +102,15 @@ class RDR_Home extends CHOQ_View{
             });
             </script>
             <?php
-            $file = CHOQ_ACTIVE_MODULE_DIRECTORY."/logs/error.log";
+            $file = CHOQ_ACTIVE_MODULE_DIRECTORY."/logs/error.log.php";
             if(file_exists($file) && filesize($file)){
+                $data = file_get_contents($file);
+                $data = substr($data, strpos($data, "\n\n"));
                 headline(t("dashboard.errorlog"));
                 ?>
                 <div id="errorlog">
                     <input type="button" class="btn" value="<?php echo t("dashboard.clearlog")?>"/>
-                    <pre style="font-size:11px; overflow:auto; max-height:400px;"><code><?php echo s(file_get_contents($file))?></code></pre>
+                    <pre style="font-size:11px; overflow:auto; max-height:400px;"><code><?php echo s(trim($data))?></code></pre>
                 </div>
                 <script type="text/javascript">
                 $("#errorlog input.btn").on("click", function(){
