@@ -264,15 +264,39 @@ class RDR_Import{
         $dir = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp";
         $file = "{$dir}/import.".md5($url);
         if(!file_exists($file) || filemtime($file) < time() - 300){
-            $data = @file_get_contents($url);
+            $data = self::fileGetContents($url);
             if(!$data){
                 RDR_Event::log(RDR_Event::TYPE_FEED_URLERROR, array("text" => $url));
                 return;
             }
             file_put_contents($file, $data);
         }else{
-            $data = file_get_contents($file);
+            $data = self::fileGetContents($file);
         }
+        return $data;
+    }
+
+    /**
+    * File get contents with correct headers
+    *
+    * @param mixed $url
+    * @return string
+    */
+    static private function fileGetContents($url){
+        if(!preg_match("~^http|https~i", $url) && file_exists($url)) return file_get_contents($url);
+        $context = stream_context_create(array(
+            'http'=>array(
+                'method'=>"GET",
+                'header'=>
+                    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n" .
+                    "Accept-Language: en-US,en;q=0.8\r\n".
+                    "Keep-Alive: timeout=3, max=10\r\n",
+                    "Connection: keep-alive",
+                'user_agent'=>"User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11",
+                "ignore_errors" => true
+            )
+        ));
+        $data = @file_get_contents($url, false, $context);
         return $data;
     }
 
