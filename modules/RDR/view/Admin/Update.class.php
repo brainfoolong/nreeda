@@ -75,7 +75,7 @@ class RDR_Admin_Update extends CHOQ_View{
                                     $newest = $branch["name"];
                                 }
                             }
-                            if(version_compare($newest, RDR_VERSION, ">") || 1){
+                            if(version_compare($newest, RDR_VERSION, ">")){
                                 $data = array("message" => "New Version '$newest' found... Fetching files...", "event" => "success",  "next" => "prepare", "params" => array("version" => $newest));
                             }else{
                                 $data = array("message" => "You are already up2date. No update needed. Congratulations.", "event" => "success");
@@ -125,7 +125,7 @@ class RDR_Admin_Update extends CHOQ_View{
                             "params" => array(
                                 "updatefolder" => $folder,
                                 "rootfolder" => CHOQ_ROOT_DIRECTORY,
-                                "updateurl" => url()->getByAlias("base", "RDR/tmp/update/nreeda-".get("version")."/update.php")
+                                "updateurl" => url()->getByAlias("base", "modules/RDR/tmp/update/nreeda-".get("version")."/update.php")
                             )
                         );
                     }catch(Exception $e){
