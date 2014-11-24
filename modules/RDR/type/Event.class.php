@@ -30,6 +30,7 @@ class RDR_Event extends CHOQ_DB_Object{
     const TYPE_FEED_EXIST = 8;
     const TYPE_SIMPLEXML_ERROR = 7;
     const TYPE_CRON_START = 3;
+    const TYPE_CRON_RUNNING = 16;
     const TYPE_CRON_END = 4;
     const TYPE_ERROR = 9;
     const TYPE_OPML_OK = 10;
@@ -85,7 +86,7 @@ class RDR_Event extends CHOQ_DB_Object{
         $time = RDR_Setting::get("maxeventlifetime")->value;
         if(!$time) $time = "- 1 day";
         while(true){
-            $tmp = db()->getByCondition(__CLASS__, "createTime < {0}", array(dt("now $time")), NULL, 1000);
+            $tmp = self::getByCondition("createTime < {0}", array(dt("now $time")), NULL, 1000);
             if(!$tmp) break;
             db()->deleteMultiple($tmp);
         }

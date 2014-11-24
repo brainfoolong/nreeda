@@ -20,6 +20,8 @@ class RDR_Settings extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
+        needRole(NULL, true);
+
         if(post("savepw")){
             if(post("newpw") && post("newpw") == post("newpw2")){
                 user()->setPassword(post("newpw"));

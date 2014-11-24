@@ -26,8 +26,8 @@ class RDR_Ajax extends CHOQ_View{
         switch(post("action")){
             case "admin-feed":
                 if(needRole(RDR_User::ROLE_ADMIN)){
-                    $entry = db()->getById("RDR_Entry", post("eid"));
-                    $feed = db()->getById("RDR_Feed", post("fid"));
+                    $entry = RDR_Entry::getById(post("eid"));
+                    $feed = RDR_Feed::getById(post("fid"));
                     ?>
                     <b><?php echo t("feedadmin.raw.1")?></b>
                     <div class="small">
@@ -50,7 +50,7 @@ class RDR_Ajax extends CHOQ_View{
             break;
             case "readed":
                 if(post("ids")){
-                    $entries = db()->getByIds("RDR_Entry", post("ids"));
+                    $entries = RDR_Entry::getByIds(post("ids"));
                     if($entries) {
                         user()->loadReadedFlags(array_keys($entries));
                         $insertIds = $deleteIds = array();
@@ -78,7 +78,7 @@ class RDR_Ajax extends CHOQ_View{
             break;
             case "saved":
                 if(post("ids")){
-                    $entry = db()->getById("RDR_Entry", post("ids[0]"));
+                    $entry = RDR_Entry::getById(post("ids[0]"));
                     if($entry) {
                         if(user()->getByKey("saved", $entry->getId())){
                             user()->remove("saved", $entry->getId());

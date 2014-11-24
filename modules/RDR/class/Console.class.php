@@ -19,7 +19,7 @@ class RDR_Console{
     * Process the tasks
     */
     static function process(){
-        if(!RDR::$isInstalled) return;
+        if(!inNormalMode()) return;
         switch($_SERVER["argv"][1]){
             case "cron":
                 $view = new RDR_Cron();

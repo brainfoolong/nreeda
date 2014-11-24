@@ -20,6 +20,7 @@ class RDR_Login extends CHOQ_View{
     * On load not implemented
     */
     public function onLoad(){
+        if(user()) redirect(get("redirect") ? get("redirect") : l("RDR_Home"), 302);
         view("RDR_BasicFrame", array("view" => $this));
     }
 

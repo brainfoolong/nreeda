@@ -21,6 +21,7 @@ class RDR_Proxy extends CHOQ_View{
     */
     public function onLoad(){
         if(!needRole()) return;
+
         if(get("type") == "image"){
             $url = urldecode(get("url"));
             if(substr($url, 0, 2) == "//") $url = "http:".$url;

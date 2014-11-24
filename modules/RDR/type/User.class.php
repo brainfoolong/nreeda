@@ -83,7 +83,7 @@ class RDR_User extends CHOQ_DB_Object{
     * @return self | NULL
     */
     static function login($username, $password, $remember = false){
-        $user = db()->getByCondition("RDR_User", "username = {0}", array($username));
+        $user = RDR_User::getByCondition("username = {0}", array($username));
         if($user){
             $user = reset($user);
             if($user->passwordMatch($password)){
@@ -190,7 +190,7 @@ class RDR_User extends CHOQ_DB_Object{
     */
     public function getCategories(){
         if(self::$_cache === NULL){
-            self::$_cache = db()->getByCondition("RDR_Category", db()->quote("user")." = {0}", array($this), "+name");
+            self::$_cache = RDR_Category::getByCondition(db()->quote("user")." = {0}", array($this), "+name");
         }
         return self::$_cache;
     }

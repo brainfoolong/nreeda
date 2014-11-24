@@ -38,7 +38,7 @@ class RDR_Admin_User extends CHOQ_View{
 
         $this->user = new RDR_User(db());
         if(get("id")){
-            $tmp = db()->getById("RDR_User", get("id"));
+            $tmp = RDR_User::getById(get("id"));
             if($tmp) $this->user = $tmp;
         }
 
@@ -66,7 +66,7 @@ class RDR_Admin_User extends CHOQ_View{
     */
     public function getContent(){
         headline(t("admin.user.1"));
-        $users = db()->getByCondition("RDR_User", NULL, NULL, "+username");
+        $users = RDR_User::getByCondition(NULL, NULL, "+username");
         foreach($users as $user){
             ?>
             <a href="<?php echo url()->getModifiedUri(array("id" => $user->getId()))?>"><?php echo s($user->username)?> (<?php echo t("user.".$user->role)?>)</a><br/>

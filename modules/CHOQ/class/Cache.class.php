@@ -32,21 +32,25 @@ abstract class CHOQ_Cache{
     /**
     * Add a instance
     *
-    * @param string $id
     * @param string $path Anything parsable by parse_url()
+    * @param mixed $id NULL for default or a string id
     */
-    static function add($id = "default", $path){
+    static function add($path, $id = NULL){
+        if(is_null($id)) $id = "default";
         $parsedUrl = parse_url($path);
         self::$instances[$id] = $parsedUrl;
     }
 
     /**
     * Get a instance
+    * If $id is not set than the "default" is used
     *
-    * @param mixed $id
+    * @param mixed $id The instance id
     * @return self
     */
-    static function getInstance($id = "default"){
+    static function getInstance($id = NULL){
+        if(is_null($id)) $id = "default";
+        if($id instanceof CHOQ_Cache) $id = $id->id;
         if(!isset(self::$instances[$id])){
             error("No Cache Instance added for '$id' Instance");
         }

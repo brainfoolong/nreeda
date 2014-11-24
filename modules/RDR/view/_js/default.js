@@ -372,6 +372,7 @@ var Sidebar = {
 var Global = {
 
     vars : {},
+    updateNewsIV : null,
 
     /**
     * On init page
@@ -383,7 +384,7 @@ var Global = {
         Sidebar.init();
 
         if($("#sidebar").length) {
-            setInterval(Global.updateNewsCache, 20000);
+            Global.updateNewsIV = setInterval(Global.updateNewsCache, 20000);
         }
 
         $(window).trigger("update");

@@ -60,7 +60,7 @@ class RDR_Entry extends CHOQ_DB_Object{
     */
     static function get(RDR_Feed $feed, $uniqueId){
         $uniqueId = $feed->getId()."-".md5($uniqueId);
-        $object = db()->getByCondition("RDR_Entry", "uniqueId = {1}", array($feed, $uniqueId));
+        $object = RDR_Entry::getByCondition("uniqueId = {1}", array($feed, $uniqueId));
         if($object) return reset($object);
         $object = new self(db());
         $object->feed = $feed;

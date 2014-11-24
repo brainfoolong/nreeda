@@ -20,7 +20,9 @@ class RDR_RSS extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
-        if(RDR::$isInstalled && get("token")){
+        needRole(NULL, true);
+
+        if(get("token")){
             $token = explode(".", get("token"));
             if(count($token) == 2 && saltedHash("sha256", $token[0]) == $token[1]){
                 session("user.id", $token[0]);
@@ -45,8 +47,8 @@ class RDR_RSS extends CHOQ_View{
                     $offset = 0;
                     $limit = 50;
                     while(true){
-                        $entries = db()->getByCondition(
-                            "RDR_Entry", "feed IN {0} && id > {1}",
+                        $entries = RDR_Entry::getByCondition(
+                            "feed IN {0} && id > {1}",
                             array($feeds, (int)user()->setting("init.entry")),
                             array("-datetime", "-id"),
                             $limit,

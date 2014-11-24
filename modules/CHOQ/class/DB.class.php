@@ -96,10 +96,11 @@ abstract class CHOQ_DB{
     /**
     * Add a DB Connection
     *
-    * @param string $id
     * @param string $connectUrl Anything parseable by parse_url()
+    * @param mixed $id NULL for default or a string id
     */
-    static function add($id = "default", $connectUrl){
+    static function add($connectUrl, $id = NULL){
+        if(is_null($id)) $id = "default";
         if(substr($connectUrl, 0, 10) == "sqlite3://"){
             $parsedUrl = array("scheme" => "sqlite3", "path" => substr($connectUrl, 10));
         }else{
@@ -110,11 +111,14 @@ abstract class CHOQ_DB{
 
     /**
     * Get a DB instance
+    * If $id is not set than the "default" is used
     *
-    * @param string $id The DB Identifier which added from self::add()
+    * @param mixed $id The instance id
     * @return CHOQ_DB
     */
-    static function get($id = "default"){
+    static function get($id = NULL){
+        if(is_null($id)) $id = "default";
+        if($id instanceof CHOQ_DB) $id = $id->id;
         if(!isset(self::$pool[$id])) error("No such '$id' DB connection added");
         if(isset(self::$instances[$id])) return self::$instances[$id];
         $connectionData = self::$pool[$id];
@@ -277,6 +281,7 @@ abstract class CHOQ_DB{
 
     /**
     * Get objects by condition
+    * Search without any parameter will return all objects
     *
     * @param string $type
     * @param string|NULL $condition If NULL than no condition is added (getAll)

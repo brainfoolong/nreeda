@@ -453,20 +453,20 @@ function dt($time){
 /**
 * Get a cache instance
 *
-* @param string $id
+* @param mixed $id The instance id
 * @return CHOQ_Cache
 */
-function cache($id = "default"){
+function cache($id = NULL){
     return CHOQ_Cache::getInstance($id);
 }
 
 /**
 * Get a DB instance
 *
-* @param string $id
+* @param mixed $id The instance id
 * @return CHOQ_DB
 */
-function db($id = "default"){
+function db($id = NULL){
     return CHOQ_DB::get($id);
 }
 

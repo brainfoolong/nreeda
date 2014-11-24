@@ -20,6 +20,7 @@ class RDR_Archive extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
+        needRole(NULL, true);
         view("RDR_BasicFrame", array("view" => $this));
     }
 

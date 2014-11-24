@@ -673,3 +673,10 @@ input.black, select.black, textarea.black{
     color:#ff3300;
     cursor: pointer;
 }
+
+.page-rdr-admin-update .type{
+    border-bottom: 1px solid #d5d5d5;
+    padding:10px;
+    font-size: 12px;
+    line-height: 15px;
+}

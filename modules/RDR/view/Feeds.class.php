@@ -42,6 +42,7 @@ class RDR_Feeds extends CHOQ_View{
     */
     public function onLoad(){
         needRole(NULL, true);
+
         $p = $this->getParam("param");
         $explodeParam = explode("-", $p);
         $pType = arrayValue($explodeParam, 0);
@@ -67,7 +68,7 @@ class RDR_Feeds extends CHOQ_View{
                     $this->category = user()->getCategoryToFeed($this->feed);
                     $title = $this->feed->getCustomName($this->category);
                 }elseif(needRole(RDR_User::ROLE_ADMIN)){
-                    $this->feed = db()->getById("RDR_Feed", $pVal);
+                    $this->feed = RDR_Feed::getById($pVal);
                     if($this->feed){
                         $this->feed = $feeds[$pVal];
                         $title = $this->feed->name;
@@ -168,7 +169,7 @@ class RDR_Feeds extends CHOQ_View{
             $entryIds = array_slice($ids, 0, $max);
             session("entry.ids", array_slice($ids, $max));
 
-            $entries = db()->getByIds("RDR_Entry", $entryIds, true);
+            $entries = RDR_Entry::getByIds($entryIds, true);
             foreach($entries as $entry) $this->displayEntry($entry);
 
             $c = count($entries);

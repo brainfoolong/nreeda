@@ -22,7 +22,7 @@ class RDR_Import{
     static function updateAllFeeds(){
         ini_set("memory_limit", "256M");
         set_time_limit(6000);
-        $feeds = db()->getByCondition("RDR_Feed", NULL, NULL, "+lastImport");
+        $feeds = RDR_Feed::getByCondition(NULL, NULL, "+lastImport");
         foreach($feeds as $feed){
             try{
                 self::importFavicon($feed);
@@ -40,7 +40,7 @@ class RDR_Import{
             $dir = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp";
             $files = CHOQ_FileManager::getFiles($dir, false, true);
             foreach($files as $file){
-                if(preg_match("~^import\.|proxy\.~i", $file) && filemtime($file) < dt("now -1 day")->getUnixtime()) unlink($file);
+                if(!is_dir($file) && preg_match("~^import\.|proxy\.~i", $file) && filemtime($file) < dt("now -1 day")->getUnixtime()) unlink($file);
             }
         }catch(Exception $e){
             RDR_Event::log(RDR_Event::TYPE_ERROR, array("text" => $e->getMessage()));
@@ -260,7 +260,7 @@ class RDR_Import{
     * @param mixed $url
     * @return string
     */
-    static private function getURLContent($url){
+    static function getURLContent($url){
         $dir = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp";
         $file = "{$dir}/import.".md5($url);
         if(!file_exists($file) || filemtime($file) < time() - 300){

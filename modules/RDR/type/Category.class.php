@@ -40,7 +40,7 @@ class RDR_Category extends CHOQ_DB_Object{
     * @return self
     */
     static function get($name){
-        $object = db()->getByCondition("RDR_Category", db()->quote("user")." = {1} AND name = {0}", array($name, user()));
+        $object = RDR_Category::getByCondition(db()->quote("user")." = {1} AND name = {0}", array($name, user()));
         if($object) return reset($object);
         $object = new self(db());
         $object->name = $name;

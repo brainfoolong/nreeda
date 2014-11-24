@@ -17,7 +17,7 @@ if(!defined("CHOQ")) die();
 class CHOQ_FileManager{
 
     /**
-    * Get array of files
+    * Get array of files and directories
     *
     * @param mixed $directory
     * @param mixed $recursive
@@ -35,9 +35,11 @@ class CHOQ_FileManager{
             if($file == "." || $file == "..") continue;
             if(is_dir($path)){
                 if($flat){
-                    $files += self::getFiles($path, $recursive, true);
+                    $files = array_merge($files, self::getFiles($path, $recursive, true));
+                    $files[] = $path;
                 }else{
-                    $files[":childs"] = self::getFiles($path, $recursive, false);
+                    $files[$file]["files"] = self::getFiles($path, $recursive, false);
+                    $files[$file]["path"] = $path;
                 }
             }else{
                 $files[] = $path;

@@ -40,7 +40,7 @@ class RDR_Feed extends CHOQ_DB_Object{
     * @return self
     */
     static function get($url){
-        $object = db()->getByCondition("RDR_Feed", "url = {0}", array($url));
+        $object = RDR_Feed::getByCondition("url = {0}", array($url));
         if($object) return reset($object);
         $object = new self(db());
         $object->url = $url;
@@ -109,8 +109,8 @@ class RDR_Feed extends CHOQ_DB_Object{
     */
     public function delete(){
         if(!$this->getId()) return;
-        db()->deleteMultiple(db()->getByCondition("RDR_Entry", "feed = {0}", array($this)));
-        $cats = db()->getByQuery("RDR_Category", "
+        db()->deleteMultiple(RDR_Entry::getByCondition("feed = {0}", array($this)));
+        $cats = RDR_Category::getByQuery("
             SELECT o FROM RDR_Category_feeds
             WHERE k = ".$this->getId()."
         ");

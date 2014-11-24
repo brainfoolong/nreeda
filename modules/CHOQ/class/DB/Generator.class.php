@@ -233,7 +233,7 @@ abstract class CHOQ_DB_Generator{
         foreach($this->modules as $module){
             $files = CHOQ_FileManager::getFiles($module->directory.DS."type", true, true);
             foreach($files as $file){
-                if(strpos($file, ".class.php") !== false) {
+                if(!is_dir($file) && strpos($file, ".class.php") !== false) {
                     $class = str_replace(array(CHOQ_ROOT_DIRECTORY.DS."modules".DS, DS, "_type_"), array("", "_", "_"), $file);
                     $class = substr($class, 0, strpos($class, "."));
                     CHOQ_ClassManager::loadClass($class);

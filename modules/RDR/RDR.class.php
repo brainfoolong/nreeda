@@ -24,12 +24,19 @@ class RDR extends CHOQ_Module{
     static $isInstalled = false;
 
     /**
+    * Is RDR in maintenance mode
+    *
+    * @var bool
+    */
+    static $maintenanceMode = false;
+
+    /**
     * Fired when initialise the module
     */
     public function onInit(){
 
         html()->pageTitle = "nReeda - Web-based Open Source RSS/XML/Atom Feed Reader";
-        define("RDR_VERSION", "1.0.1");
+        define("RDR_VERSION", "1.1.0");
 
         $devFile = __DIR__."/_RDR.dev.php";
         $localFile = __DIR__."/_RDR.local.php";
@@ -48,6 +55,7 @@ class RDR extends CHOQ_Module{
             CHOQ_View::mapViewToUrl("RDR_Proxy", "/index.php/proxy");
             CHOQ_View::mapViewToUrl("RDR_Ajax", "/index.php/ajax");
             CHOQ_View::mapViewToUrl("RDR_Archive", "/index.php/archive");
+            CHOQ_View::mapViewToUrl("RDR_Admin_System", "/index.php/admin-system");
             CHOQ_View::mapViewToUrl("RDR_Admin_Update", "/index.php/admin-update");
             CHOQ_View::mapViewToUrl("RDR_Admin_Settings", "/index.php/admin-settings");
             CHOQ_View::mapViewToUrl("RDR_Admin_User", "/index.php/admin-user");
@@ -57,6 +65,7 @@ class RDR extends CHOQ_Module{
             CHOQ_View::mapViewToUrl("RDR_Login", "/index.php/login");
             CHOQ_View::mapViewToUrl("RDR_RSS", "/index.php/rss");
             CHOQ_View::mapViewToUrl("RDR_BrowserScript", "/index.php/browser-script.js");
+            CHOQ_View::mapViewToUrl("RDR_Maintenance", "/index.php/maintenance");
         }else{
             CHOQ_View::mapViewToUrl("RDR_Install", "/index.php/install");
         }
@@ -86,20 +95,30 @@ class RDR extends CHOQ_Module{
 }
 
 /**
+* Check if RDR running in normal mode
+*
+* @return bool
+*/
+function inNormalMode(){
+    if(!RDR::$isInstalled || RDR::$maintenanceMode) return false;
+    return true;
+}
+
+/**
 * Get the user instance
 *
 * @return RDR_User | NULL
 */
 function user(){
-    if(!RDR::$isInstalled) return;
+    if(!inNormalMode()) return;
     if(RDR_User::$user) return RDR_User::$user;
     if(cookie("user-id") && cookie("user-id-salted") && cookie("user-id-salted") == saltedHash("sha256", cookie("user-id"))){
-        $user = db()->getById("RDR_User", cookie("user.id"));
+        $user = RDR_User::getById(cookie("user.id"));
         RDR_User::$user = $user;
         return $user;
     }
     if(session("user.id")){
-        $user = db()->getById("RDR_User", session("user.id"));
+        $user = RDR_User::getById(session("user.id"));
         RDR_User::$user = $user;
         return $user;
     }
@@ -116,16 +135,24 @@ function headline($title){
 
 /**
 * Need a specific role to to such things?
+* Also do initial checks for installed and maintenance mode
 *
 * @param mixed $role
 * @param mixed $redirect
 * @return bool
 */
 function needRole($role = NULL, $redirect = false){
+    if(RDR::$maintenanceMode){
+        if($redirect) redirect(l("RDR_Maintenance"), 302);
+        return false;
+    }elseif(!RDR::$isInstalled){
+        if($redirect) redirect(l("RDR_Install"), 302);
+        return false;
+    }
     $access = true;
     if(!user()) $access = false;
     if($access && $role !== NULL && $role != user()->role) $access = false;
-    if(!$access && $redirect) redirect(l("RDR_Home"), 302);
+    if(!$access && $redirect) redirect(l(!user() ? "RDR_Login" : "RDR_Home"), 302);
     return $access;
 }
 

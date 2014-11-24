@@ -51,13 +51,13 @@ class RDR_Install extends CHOQ_View{
         if(post("install")){
             try{
                 $connString = "mysql://".post("mysql-user").":".post("mysql-pass")."@".post("mysql-host")."/".post("mysql-db");
-                CHOQ_DB::add("test", $connString);
+                CHOQ_DB::add($connString, "test");
                 db("test")->query("DROP TABLE IF EXISTS ".db("test")->quote("RDR_test"));
                 db("test")->query("CREATE TABLE ".db("test")->quote("RDR_test")." (".db("test")->quote("id")." INT NOT NULL)");
                 db("test")->query("DROP TABLE IF EXISTS ".db("test")->quote("RDR_test"));
 
                 $fileData = "<?php\nif(!defined(\"CHOQ\")) die();\n/**\n * Local Configuration\n**/\n\n";
-                $fileData .= 'CHOQ_DB::add("default", \''.$connString.'\');'."\n";
+                $fileData .= 'CHOQ_DB::add(\''.$connString.'\');'."\n";
                 $fileData .= 'v("hash.salt", "'.uniqid(NULL, true).sha1(microtime().uniqid(NULL, true)).'");'."\n";
                 $tmpfile = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/_RDR.local.tmp.php";
                 file_put_contents($tmpfile, $fileData);
@@ -90,7 +90,7 @@ class RDR_Install extends CHOQ_View{
         <div class="center">
             <img src="<?php echo url()->getByAlias("public", "img/logo-1.png")?>" alt=""/>
         </div>
-        <?php 
+        <?php
         if(!$errors){
             $this->showErrors($checkErrors);
 
@@ -137,12 +137,12 @@ class RDR_Install extends CHOQ_View{
 
         $field = new Form_Field_Text("mysql-db", t("install.db"));
         $field->addValidator($validator);
-        $field->setDefaultValue("opass");
+        $field->setDefaultValue("nreeda");
         $form->addField($field);
 
         $field = new Form_Field_Text("mysql-user", t("install.user"));
         $field->addValidator($validator);
-        $field->setDefaultValue("opass");
+        $field->setDefaultValue("nreeda");
         $form->addField($field);
 
         $field = new Form_Field_Password("mysql-pass", t("install.pw"));

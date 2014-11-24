@@ -21,10 +21,11 @@ class RDR_API extends CHOQ_View{
     */
     public function onLoad(){
         if(!needRole()) return;
+
         $jsonData = NULL;
         switch(post("action")){
             case "delete-feed-user":
-                $feed = db()->getById("RDR_Feed", post("data[fid]"));
+                $feed = RDR_Feed::getById(post("data[fid]"));
                 if($feed){
                     $cats = user()->getCategories();
                     foreach($cats as $category){
@@ -45,7 +46,7 @@ class RDR_API extends CHOQ_View{
             break;
             case "delete-feed-admin":
                 if(needRole(RDR_User::ROLE_ADMIN)){
-                    $feed = db()->getById("RDR_Feed", post("data[fid]"));
+                    $feed = RDR_Feed::getById(post("data[fid]"));
                     if($feed){
                         $feed->delete();
                     }
@@ -83,7 +84,7 @@ class RDR_API extends CHOQ_View{
             break;
             case "set-entries-readed":
                 if(post("data[ids]")){
-                    $entries = db()->getByIds("RDR_Entry", post("data[ids]"));
+                    $entries = RDR_Entry::getByIds(post("data[ids]"));
                     if($entries) {
                         user()->loadReadedFlags(array_keys($entries));
                         $insertIds = $deleteIds = array();
@@ -111,7 +112,7 @@ class RDR_API extends CHOQ_View{
             break;
             case "set-entries-saved":
                 if(post("data[ids]")){
-                    $entry = db()->getById("RDR_Entry", post("data[ids][0]"));
+                    $entry = RDR_Entry::getById(post("data[ids][0]"));
                     if($entry) {
                         if(user()->getByKey("saved", $entry->getId())){
                             user()->remove("saved", $entry->getId());
@@ -124,7 +125,7 @@ class RDR_API extends CHOQ_View{
             break;
             case "set-feed-property":
                 if(needRole(RDR_User::ROLE_ADMIN)){
-                    $feed = db()->getById("RDR_Feed", post("data[feed]"));
+                    $feed = RDR_Feed::getById(post("data[feed]"));
                     if($feed){
                         $feed->{post("data[field]")} = post("data[value]");
                         $feed->store();

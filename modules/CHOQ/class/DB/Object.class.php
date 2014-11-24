@@ -150,6 +150,63 @@ abstract class CHOQ_DB_Object{
     }
 
     /**
+    * Get object by id
+    *
+    * @param int $id
+    * @param mixed $db The db connection to use
+    * @return static | NULL
+    */
+    static public function getById($id, $db = NULL){
+        return db($db)->getById(get_called_class(), $id);
+    }
+
+    /**
+    * Get objects by ids - Uses the default db connection
+    *
+    * @param array $id
+    * @param bool $resort If true than the resulted array is in the same sort as the given ids
+    * @param mixed $db The db connection to use
+    * @return static[]
+    */
+    static public function getByIds(array $ids, $resort = false, $db = NULL){
+        return db($db)->getByIds(get_called_class(), $ids, $resort);
+    }
+
+    /**
+    * Get objects by condition
+    * Search without any parameter will return all objects
+    *
+    * @param string|NULL $condition If NULL than no condition is added (getAll)
+    *   To add a parameters placeholder add brackets with the parameters key - Example: {mykey}
+    *   To quote fieldNames correctly enclose a fieldName with <fieldName>
+    * @param mixed $parameters Can be a array of parameters, a single parameter or NULL
+    * @param mixed $sort Can be a array of sorts, a single sort or NULL
+    *   Sort value must be a fieldName with a +/- prefix - Example: -id
+    *   + means sort ASC
+    *   - means sort DESC
+    * @param int|NULL $limit Define a limit for the query
+    * @param int|NULL $offset Define a offset for the query
+    * @param mixed $db The db connection to use
+    * @return static[]
+    */
+    static function getByCondition($condition = NULL, $parameters = NULL, $sort = NULL, $limit = NULL, $offset = NULL, $db = NULL){
+        return db($db)->getByCondition(get_called_class(), $condition, $parameters, $sort, $limit, $offset);
+    }
+
+
+    /**
+    * Get objects by own defined query
+    * You only MUST select the id of the table - SELECT id FROM ...
+    *
+    * @param mixed $query
+    * @param mixed $db The db connection to use
+    * @return static[]
+    */
+    static public function getByQuery($query, $db = NULL){
+        return db($db)->getByQuery(get_called_class(), $query);
+    }
+
+    /**
     * Constructor
     *
     * @param CHOQ_DB $db

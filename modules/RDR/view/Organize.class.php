@@ -20,6 +20,7 @@ class RDR_Organize extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
+        needRole(NULL, true);
 
         # OPML
         if(get("opml")){

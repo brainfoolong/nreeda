@@ -17,24 +17,165 @@ if(!defined("CHOQ")) die();
 class RDR_Admin_Update extends CHOQ_View{
 
     /**
+    * Get valid hash for maintenance mode
+    *
+    * @return string
+    */
+    static function getValidHash(){
+        return saltedHash("md5", __FILE__);
+    }
+
+    /**
+    * Get GIT Json data
+    *
+    * @param mixed $url
+    * @return array | false
+    */
+    static function getGitJSON($url){
+        $data = RDR_Import::getURLContent($url);
+        $data = json_decode($data, true);
+        return $data;
+    }
+
+    /**
     * Load the View
     */
     public function onLoad(){
-        needRole(RDR_User::ROLE_ADMIN, true);
-        if(req()->isAjax()){
-            if(post("update")){
-                $feed = db()->getById("RDR_Feed", post("update"));
-                if($feed){
-                    RDR_Import::importFeedEntries($feed);
-                }
+        if(req()->isAjax() && get("code") == self::getValidHash()){
+            switch(get("action")){
+                case "start":
+                    if(RDR_Cron::isRunning()){
+                        $data = array("message" => 'Cronjob is currently running... Please try again later...', "event" => "error",  "next" => "");
+                    }else{
+                        RDR_Maintenance::enableMaintenanceMode();
+                        $data = array("message" => '<b>Maintenance Mode enabled</b><br/><br/>If you have any troubles with the update and you stuck in maintenance mode than run the following url to manually disable maintenance mode<br/><u>'.url()->getByAlias("root", l("RDR_Maintenance")).'?disable-maintenance='.RDR_Maintenance::getValidHash().'</u><br/><br/>You can also disable maintenance mode by removing the line <u>RDR::$maintenanceMode = true</u> from your _RDR.local.php file<br/><br/>Contacting GIT for available updates...', "event" => "success",  "next" => "check");
+                    }
+                break;
+                case "check":
+                    try{
+                        # checking all files and directories for write access
+                        $files = CHOQ_FileManager::getFiles(CHOQ_ROOT_DIRECTORY, true, true);
+                        $count = 0;
+                        $files[] = CHOQ_ROOT_DIRECTORY;
+                        foreach($files as $file){
+                            if(substr($file, 0, 1) == ".") continue;
+                            if(!is_writable($file)){
+                                $count++;
+                            }
+                        }
+                        if($count) error("$count files/directories are not writeable by PHP. Make sure that you have set correct CHMOD");
+
+                        $data = array("message" => 'Failed getting updates from GIT Hub', "event" => "error",  "next" => "");
+                        $branches = self::getGitJSON("https://api.github.com/repos/brainfoolong/nreeda/branches");
+                        if($branches){
+                            $newest = NULL;
+                            foreach($branches as $branch){
+                                if($branch["name"] == "master") continue;
+                                if(!$newest || version_compare($branch["name"], $newest, ">")){
+                                    $newest = $branch["name"];
+                                }
+                            }
+                            if(version_compare($newest, RDR_VERSION, ">") || 1){
+                                $data = array("message" => "New Version '$newest' found... Fetching files...", "event" => "success",  "next" => "prepare", "params" => array("version" => $newest));
+                            }else{
+                                $data = array("message" => "You are already up2date. No update needed. Congratulations.", "event" => "success");
+                            }
+                        }
+                    }catch(Exception $e){
+                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                    }
+                break;
+                case "prepare":
+                    try{
+                        # downloading zip file
+                        $data = RDR_Import::getURLContent("https://github.com/brainfoolong/nreeda/archive/".get("version").".zip");
+                        if(!$data) error("Could not fetch newest update file from GIT");
+
+                        $tmpZip = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/update.zip";
+                        file_put_contents($tmpZip, $data);
+
+                        $updateDir = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/update";
+                        if(!is_dir($updateDir)) mkdir($updateDir);
+
+                        # removing all old files
+                        $files = CHOQ_FileManager::getFiles($updateDir, true, true);
+                        foreach($files as $file){
+                            if(!is_dir($file)){
+                                unlink($file);
+                            }
+                        }
+                        foreach($files as $file){
+                            if(is_dir($file)){
+                                rmdir($file);
+                            }
+                        }
+
+                        # extract zip file to tmp folder
+                        $zip = new ZipArchive();
+                        $zip->open($tmpZip);
+                        $zip->extractTo($updateDir);
+                        $zip->close();
+
+                        $folder = $updateDir."/nreeda-".get("version");
+
+                        $data = array(
+                            "message" => 'Files successfully downloaded, start updating the files...',
+                            "event" => "success",
+                            "next" => "update",
+                            "params" => array(
+                                "updatefolder" => $folder,
+                                "rootfolder" => CHOQ_ROOT_DIRECTORY,
+                                "updateurl" => url()->getByAlias("base", "RDR/tmp/update/nreeda-".get("version")."/update.php")
+                            )
+                        );
+                    }catch(Exception $e){
+                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                    }
+                break;
+                case "db":
+                    try{
+                        # updating database
+                        $generator = CHOQ_DB_Generator::create(db());
+                        $generator->addModule("RDR");
+                        $generator->updateDatabase();
+
+                        $data = array("message" => "Database Update successful. Cleaning up...", "event" => "success", "next" => "cleanup");
+                    }catch(Exception $e){
+                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                    }
+                break;
+                case "cleanup":
+                    try{
+                        # deleting all update files
+                        $updateDir = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/update";
+                        if(is_dir($updateDir)) {
+                            $files = CHOQ_FileManager::getFiles($updateDir, true, true);
+                            foreach($files as $file){
+                                if(!is_dir($file)){
+                                    unlink($file);
+                                }
+                            }
+                            foreach($files as $file){
+                                if(is_dir($file)){
+                                    rmdir($file);
+                                }
+                            }
+                        }
+                        if(is_dir($updateDir)) rmdir($updateDir);
+                        $updateFile = CHOQ_ROOT_DIRECTORY."/update.php";
+                        if(file_exists($updateFile)) unlink($updateFile);
+
+                        $data = array("message" => "Cleanup done", "event" => "success");
+                    }catch(Exception $e){
+                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                    }
+                    RDR_Maintenance::disableMaintenanceMode();
+                break;
             }
-            if(post("updateDb")){
-                $generator = CHOQ_DB_Generator::create(db());
-                $generator->addModule("RDR");
-                $generator->updateDatabase();
-            }
+            echo json_encode($data);
             return;
         }
+        needRole(RDR_User::ROLE_ADMIN, true);
         view("RDR_BasicFrame", array("view" => $this));
     }
 
@@ -42,99 +183,46 @@ class RDR_Admin_Update extends CHOQ_View{
     * Get content
     */
     public function getContent(){
-        headline(t("admin.update.cron.title"));
         ?>
-        <div class="indent">
-            <?php echo nl2br(t("admin.update.cron.text"))?><br/>
-            <code style="font-size: 11px;">*/10 * * * * php -f <?php echo escapeshellarg(CHOQ_ROOT_DIRECTORY.DIRECTORY_SEPARATOR."console.php")?> <?php echo escapeshellarg("cron")?></code>
-        </div>
-        <div class="spacer"></div>
 
         <?php
-        headline(t("admin.update.webcron.title"));
+        headline(t("sidebar.26"));
         ?>
         <div class="indent">
-            <?php echo nl2br(t("admin.update.webcron.text"))?><br/>
-            <code style="font-size: 11px;"><a href="<?php echo RDR_Cron::getLink()?>" target="_blank"><?php echo RDR_Cron::getLink()?></a></code>
-        </div>
-        <div class="spacer"></div>
+            Use this one click updater to update nReeda to the newest stable version.<br/>
+            Don't forget to backup your database and nreeda directory before doing this step, in the case of a problem with the update.<br/>
 
-        <?php
-        headline(t("admin.update.3"));
-        ?>
-        <div class="indent">
-            <?php echo t("admin.update.4")?>.<br/><br/>
-            <div class="btn update-all"><?php echo t("admin.update.5")?></div>
             <div class="spacer"></div>
-            <?php
-            $feeds = db()->getByCondition("RDR_Feed", NULL, NULL, "+name");
-            foreach($feeds as $feed){?>
-                <div style="padding-left: 20px; margin-bottom: 2px;" class="feed">
-                    <div class="inline-btn update-feed" data-id="<?php echo $feed->getId()?>"><?php echo t("admin.update.6")?></div>
-                    <div class="inline-btn delete-feed" data-id="<?php echo $feed->getId()?>"><?php echo t("organize.15")?></div>
-                    <img src="<?php echo url()->getByAlias("public", "img/loading-2.gif")?>" alt="" style="position: relative; top:2px; display: none;" class="loading-feed"/>
-                    <a href="<?php echo $feed->getLink()?>"><?php echo s($feed->name)?></a><br/>
-                    <div class="small" style="margin-top:3px;"><a href="<?php echo s($feed->url)?>"><?php echo s($feed->url)?></a></div>
-                </div>
-            <?php } ?>
+            <?php if(class_exists("ZipArchive")){?>
+                <input type="button" class="btn update-btn" value="Run update now"/>
+            <?php }else{?>
+                <span style="color:red">You must enable the 'zip' extension in your PHP config to use the auto updater</span>
+            <?php }?>
+            <div id="result" style="padding:10px;"></div>
         </div>
-
-        <?php
-        headline(t("admin.update.7"));
-        ?>
-        <div class="indent">
-            <?php echo s(t("admin.update.8"), true)?>
-            <div class="spacer"></div>
-            <input type="button" class="btn update-db" value="<?php echo t("admin.update.9")?>"/>
-
-        </div>
-
         <script type="text/javascript">
         (function(){
-            $("input.update-db").on("click", function(){
-                Global.message("Updating...");
-                $.post('<?php echo url()->getUri()?>', {updateDb : 1}, function(){
-                    Global.message("<?php echo t("admin.update.10")?>");
-                })
-            });
-            $("#content div.update-feed.inline-btn").on("click", function(){
-                $("img.loading-feed").hide();
-                pipeline = [$(this).attr("data-id")];
-                runUpdate();
-            });
-            $("#content div.delete-feed.inline-btn").on("click", function(){
-                if(confirm(<?php echo json_encode(t("organize.13"))?>)){
-                    API.req("delete-feed-admin", {"fid" : $(this).attr("data-id")});
-                    $(this).closest(".feed").remove();
-                }
-            });
-            $("#content div.update-all").on("click", function(){
-                $("#content img.loading-feed").hide();
-                pipeline = [];
-                $("#content div.update-feed.inline-btn").each(function(){
-                    pipeline.push($(this).attr("data-id"));
-                });
-                runUpdate();
-            });
-
-            var pipeline = [];
-            function runUpdate(){
-                if(!pipeline.length) {
-                    Global.updateNewsCache();
-                    return;
-                }
-                var id = pipeline.shift();
-                var btn = $("#content div.update-feed[data-id='"+id+"']").parent().find(".loading-feed");
-                btn.show();
-                $.post('<?php echo url()->getUri()?>', {"update" : id}, function(){
-                    btn.hide();
-                    runUpdate();
+            var req = function(action, params){
+                if(!params) params = {};
+                params.action = action;
+                params.code = '<?php echo self::getValidHash()?>';
+                var url = "<?php echo url()->getModifiedUri(false)?>";
+                if(action == "update") url = params.updateurl;
+                $.getJSON(url, params, function(data){
+                     $("#result").append('<div class="type '+data.event+'">'+data.message+'</div>');
+                     if(data.next && data.next.length){
+                         req(data.next, data.params);
+                     }else{
+                         $("#result").append('<div class="type '+data.event+'">Update finished. Maintenance Mode disabled</div>');
+                     }
                 });
             }
+            $(".btn.update-btn").one("click", function(){
+                this.value = 'Update in progress... Please wait...';
+                req("start");
+            });
         })();
         </script>
         <?php
-
-
     }
 }

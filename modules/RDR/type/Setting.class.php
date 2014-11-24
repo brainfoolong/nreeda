@@ -43,7 +43,7 @@ class RDR_Setting extends CHOQ_DB_Object{
     */
     static function get($key){
         if(isset(self::$_cache[$key])) return self::$_cache[$key];
-        $object = db()->getByCondition(__CLASS__, db()->quote("key")." = {0}", array($key));
+        $object = self::getByCondition(db()->quote("key")." = {0}", array($key));
         if($object) {
             self::$_cache[$key] = reset($object);
             return self::$_cache[$key];
