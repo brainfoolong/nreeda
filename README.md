@@ -14,6 +14,9 @@ CHOQ_DB::add('mysql://...');
 ### What is nReeda?
 Simply: A self hosted RSS Reader. Just collect thousends of news from around the globe. nReeda will bring it all together in a fluid design. nReeda, was mainly designed for easy access to all your important news, on the phone, on the desktop, anywhere. There is no need of an extra app for this, it all works with just the website itself.
 
+### What is new?
+You can find the changelog here: https://github.com/brainfoolong/nreeda/wiki/Changelog
+
 #### Demo
 The best way to see how this application works is with our demo login.
 * URL: http://nreeda.bfldev.com/
