@@ -25,15 +25,25 @@ function pathFix($path){
     return str_replace(array(DIRECTORY_SEPARATOR,"/"), "/", $path);
 }
 
-if(!isset($_GET["rootfolder"], $_GET["updatefolder"])) die("Missing parameters");
+/**
+* Display error message and die
+*
+* @param mixed $message
+*/
+function error($message){
+    echo json_encode(array("message" => $message));
+    die();
+}
+
+if(!isset($_GET["rootfolder"], $_GET["updatefolder"])) error("Missing parameters");
 
 $updateFolder = pathFix(urldecode($_GET["updatefolder"]));
 $rootFolder = pathFix(urldecode($_GET["rootfolder"]));
 $currentFolder = pathFix(__DIR__);
 
 # security check if given folders are real nreeda folders
-if(!preg_match("~".preg_quote($currentFolder)."~i", $updateFolder) || !preg_match("~".preg_quote($currentFolder)."~i", $rootFolder)) die("Missing parameters");
-if(!is_dir($updateFolder) || !is_dir($rootFolder)) die("Missing parameters");
+if($updateFolder != $currentFolder || !preg_match("~".preg_quote($rootFolder)."~i", $currentFolder)) error("Invalid Folders");
+if(!is_dir($updateFolder) || !is_dir($rootFolder)) error("Folders do not exist");
 
 define("CHOQ", true);
 define("DS", DIRECTORY_SEPARATOR);
