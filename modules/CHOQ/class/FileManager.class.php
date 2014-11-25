@@ -26,7 +26,7 @@ class CHOQ_FileManager{
     *   If false than the returned array contains multiple dimensions, each dimension have a :childs member that contains a array of all child files
     * @return mixed[]
     */
-    static function getFiles($directory, $recursive, $flat = false){
+    static function getFiles($directory, $recursive = false, $flat = false){
         $files = array();
         if(!is_dir($directory)) error("'$directory' is not a directory");
         $tmp = scandir($directory);

@@ -88,6 +88,7 @@ class RDR_Cron extends CHOQ_View{
         RDR_Cleanup::cleanupEvents();
         RDR_Cleanup::cleanupEntries();
         RDR_FileContents::cleanupTmpFiles();
+        RDR_Proxy::cleanupTmpFiles();
 
         # optimizing tables
         $generator = CHOQ_DB_Generator::create(db());
