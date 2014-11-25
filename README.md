@@ -16,9 +16,9 @@ Simply: A self hosted RSS Reader. Just collect thousends of news from around the
 
 #### Demo
 The best way to see how this application works is with our demo login.
-Head to http://nreeda.bfldev.com/
-User: demo
-PW: demo 
+* URL: http://nreeda.bfldev.com/
+* User: demo
+* PW: demo 
 
 #### More Information
 Go to the Wiki at https://github.com/brainfoolong/nreeda/wiki
