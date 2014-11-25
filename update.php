@@ -14,7 +14,6 @@
 * nReeda File Updater
 */
 
-if(!isset($_GET["rootfolder"], $_GET["updatefolder"]) || !is_dir($_GET["rootfolder"]) || !is_dir($_GET["updatefolder"])) die("Missing parameters");
 
 /**
 * Path fix for the path strings
@@ -23,15 +22,24 @@ if(!isset($_GET["rootfolder"], $_GET["updatefolder"]) || !is_dir($_GET["rootfold
 * @return string
 */
 function pathFix($path){
-    return str_replace(array(DS,"/"), "/", $path);
+    return str_replace(array(DIRECTORY_SEPARATOR,"/"), "/", $path);
 }
+
+if(!isset($_GET["rootfolder"], $_GET["updatefolder"])) die("Missing parameters");
+
+$updateFolder = pathFix(urldecode($_GET["updatefolder"]));
+$rootFolder = pathFix(urldecode($_GET["rootfolder"]));
+$currentFolder = pathFix(__DIR__);
+
+# security check if given folders are real nreeda folders
+if(!preg_match("~".preg_quote($currentFolder)."~i", $updateFolder) || !preg_match("~".preg_quote($currentFolder)."~i", $rootFolder)) die("Missing parameters");
+if(!is_dir($updateFolder) || !is_dir($rootFolder)) die("Missing parameters");
 
 define("CHOQ", true);
 define("DS", DIRECTORY_SEPARATOR);
 include(__DIR__."/modules/CHOQ/class/FileManager.class.php");
 
-$updateFolder = pathFix($_GET["updatefolder"]);
-$rootFolder = pathFix($_GET["rootfolder"]);
+
 $files = CHOQ_FileManager::getFiles($updateFolder, true, true);
 
 # updating all files
@@ -53,4 +61,4 @@ foreach($files as $file){
     }
 }
 
-echo json_encode(array("message" => "Updated $count files/directories... Updating database...", "event" => "success", "next" => "db"));
+echo json_encode(array("next" => "db", "count" => $count));

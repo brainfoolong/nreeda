@@ -29,10 +29,10 @@ class RDR_Proxy extends CHOQ_View{
             $extension = end($exp);
             if(count($exp) <= 1 || !$extension || strlen($extension) > 4 || preg_match("~[^a-z]~i", $extension)) $extension = "jpg";
             $slug = md5($url);
-            $tmpPath = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/proxy.$slug.$extension";
+            $tmpPath = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/filecontents.$slug.$extension";
             if(!file_exists($tmpPath)){
                 $data = @file_get_contents($url);
-                file_put_contents($tmpPath, $data ? $data : "");
+                file_put_contents($tmpPath, $data !== false ? $data : "");
             }
             header("content-type: image/$extension");
             header("content-length: ".filesize($tmpPath));

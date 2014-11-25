@@ -32,7 +32,7 @@ class RDR_Admin_Update extends CHOQ_View{
     * @return array | false
     */
     static function getGitJSON($url){
-        $data = RDR_Import::getURLContent($url);
+        $data = RDR_FileContents::get($url);
         $data = json_decode($data, true);
         return $data;
     }
@@ -42,13 +42,41 @@ class RDR_Admin_Update extends CHOQ_View{
     */
     public function onLoad(){
         if(req()->isAjax() && get("code") == self::getValidHash()){
+            $data = NULL;
             switch(get("action")){
+                case "update-check":
+                    # fetching branches from GIT
+                    $data = array("error" => t("update.4"));
+                    $branches = self::getGitJSON("https://api.github.com/repos/brainfoolong/nreeda/branches");
+                    if($branches){
+                        $newest = NULL;
+                        foreach($branches as $branch){
+                            if($branch["name"] == "master") continue;
+                            if(!$newest || version_compare($branch["name"], $newest, ">")){
+                                $newest = $branch["name"];
+                            }
+                        }
+                        $data = array(
+                            "version" => $newest,
+                            "update" => version_compare($newest, RDR_VERSION, ">")
+                        );
+                        RDR_Setting::set("latestversion", $newest);
+                    }
+                break;
                 case "start":
                     if(RDR_Cron::isRunning()){
-                        $data = array("message" => 'Cronjob is currently running... Please try again later...', "event" => "error",  "next" => "");
+                        $data = array("message" => t("update.1"), "event" => "error");
                     }else{
                         RDR_Maintenance::enableMaintenanceMode();
-                        $data = array("message" => '<b>Maintenance Mode enabled</b><br/><br/>If you have any troubles with the update and you stuck in maintenance mode than run the following url to manually disable maintenance mode<br/><u>'.url()->getByAlias("root", l("RDR_Maintenance")).'?disable-maintenance='.RDR_Maintenance::getValidHash().'</u><br/><br/>You can also disable maintenance mode by removing the line <u>RDR::$maintenanceMode = true</u> from your _RDR.local.php file<br/><br/>Contacting GIT for available updates...', "event" => "success",  "next" => "check");
+                        $data = array(
+                            "message" => sprintf(
+                                nl2br(t("update.2"), true),
+                                url()->getByAlias("root", l("RDR_Maintenance")).'?disable-maintenance='.RDR_Maintenance::getValidHash(),
+                                'RDR::$maintenanceMode = true'
+                            ),
+                            "event" => "success",
+                            "next" => "check"
+                        );
                     }
                 break;
                 case "check":
@@ -63,33 +91,20 @@ class RDR_Admin_Update extends CHOQ_View{
                                 $count++;
                             }
                         }
-                        if($count) error("$count files/directories are not writeable by PHP. Make sure that you have set correct CHMOD");
+                        if($count) error(sprintf(t("update.3"), $count));
 
-                        $data = array("message" => 'Failed getting updates from GIT Hub', "event" => "error",  "next" => "");
-                        $branches = self::getGitJSON("https://api.github.com/repos/brainfoolong/nreeda/branches");
-                        if($branches){
-                            $newest = NULL;
-                            foreach($branches as $branch){
-                                if($branch["name"] == "master") continue;
-                                if(!$newest || version_compare($branch["name"], $newest, ">")){
-                                    $newest = $branch["name"];
-                                }
-                            }
-                            if(version_compare($newest, RDR_VERSION, ">")){
-                                $data = array("message" => "New Version '$newest' found... Fetching files...", "event" => "success",  "next" => "prepare", "params" => array("version" => $newest));
-                            }else{
-                                $data = array("message" => "You are already up2date. No update needed. Congratulations.", "event" => "success");
-                            }
-                        }
+                        $version = RDR_Setting::get("latestversion")->value;
+                        $data = array("message" => sprintf(t("update.5"), $version), "event" => "success",  "next" => "prepare", "params" => array("version" => $version));
                     }catch(Exception $e){
-                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                        $data = array("message" => sprintf(t("update.7"), $e->getMessage()), "event" => "error");
                     }
                 break;
                 case "prepare":
                     try{
-                        # downloading zip file
-                        $data = RDR_Import::getURLContent("https://github.com/brainfoolong/nreeda/archive/".get("version").".zip");
-                        if(!$data) error("Could not fetch newest update file from GIT");
+                        # downloading zip file from GIT
+                        $url = "https://github.com/brainfoolong/nreeda/archive/".get("version").".zip";
+                        $data = RDR_FileContents::get($url);
+                        if($data === false) return;
 
                         $tmpZip = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/update.zip";
                         file_put_contents($tmpZip, $data);
@@ -119,7 +134,7 @@ class RDR_Admin_Update extends CHOQ_View{
                         $folder = $updateDir."/nreeda-".get("version");
 
                         $data = array(
-                            "message" => 'Files successfully downloaded, start updating the files...',
+                            "message" => t("update.9"),
                             "event" => "success",
                             "next" => "update",
                             "params" => array(
@@ -129,7 +144,7 @@ class RDR_Admin_Update extends CHOQ_View{
                             )
                         );
                     }catch(Exception $e){
-                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                        $data = array("message" => sprintf(t("update.7"), $e->getMessage()), "event" => "error");
                     }
                 break;
                 case "db":
@@ -139,9 +154,9 @@ class RDR_Admin_Update extends CHOQ_View{
                         $generator->addModule("RDR");
                         $generator->updateDatabase();
 
-                        $data = array("message" => "Database Update successful. Cleaning up...", "event" => "success", "next" => "cleanup");
+                        $data = array("message" => t("update.10"), "event" => "success", "next" => "cleanup");
                     }catch(Exception $e){
-                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                        $data = array("message" => sprintf(t("update.7"), $e->getMessage()), "event" => "error");
                     }
                 break;
                 case "cleanup":
@@ -165,10 +180,12 @@ class RDR_Admin_Update extends CHOQ_View{
                         $updateFile = CHOQ_ROOT_DIRECTORY."/update.php";
                         if(file_exists($updateFile)) unlink($updateFile);
 
-                        $data = array("message" => "Cleanup done", "event" => "success");
+                        $data = array("message" => t("update.11"), "event" => "success");
                     }catch(Exception $e){
-                        $data = array("message" => 'Error: '.$e->getMessage(), "event" => "error",  "next" => "");
+                        $data = array("message" => sprintf(t("update.7"), $e->getMessage()), "event" => "error");
                     }
+                break;
+                case "disable":
                     RDR_Maintenance::disableMaintenanceMode();
                 break;
             }
@@ -183,20 +200,16 @@ class RDR_Admin_Update extends CHOQ_View{
     * Get content
     */
     public function getContent(){
-        ?>
-
-        <?php
         headline(t("sidebar.26"));
         ?>
         <div class="indent">
-            Use this one click updater to update nReeda to the newest stable version.<br/>
-            Don't forget to backup your database and nreeda directory before doing this step, in the case of a problem with the update.<br/>
+            <?php echo s(t("update.14"), true)?>
 
             <div class="spacer"></div>
             <?php if(class_exists("ZipArchive")){?>
-                <input type="button" class="btn update-btn" value="Run update now"/>
+                <div class="update-check"><?php echo t("update.19")?></div>
             <?php }else{?>
-                <span style="color:red">You must enable the 'zip' extension in your PHP config to use the auto updater</span>
+                <span style="color:red"><?php echo t("update.15")?></span>
             <?php }?>
             <div id="result" style="padding:10px;"></div>
         </div>
@@ -209,18 +222,40 @@ class RDR_Admin_Update extends CHOQ_View{
                 var url = "<?php echo url()->getModifiedUri(false)?>";
                 if(action == "update") url = params.updateurl;
                 $.getJSON(url, params, function(data){
-                     $("#result").append('<div class="type '+data.event+'">'+data.message+'</div>');
-                     if(data.next && data.next.length){
-                         req(data.next, data.params);
-                     }else{
-                         $("#result").append('<div class="type '+data.event+'">Update finished. Maintenance Mode disabled</div>');
-                     }
+                    if(data.message) $("#result").append('<div class="type '+data.event+'">'+data.message+'</div>');
+                    if(data.next && data.next.length){
+                        req(data.next, data.params);
+                    }else if(action != "disable"){
+                        req("disable");
+                        $("#result").append($('<div class="type '+data.event+'">').html(<?php echo json_encode(nl2br(t("update.12"), true))?>));
+                    }
                 });
             }
-            $(".btn.update-btn").one("click", function(){
-                this.value = 'Update in progress... Please wait...';
-                req("start");
-            });
+            if($(".update-check").length){
+                var params = {};
+                params.action = "update-check";
+                params.code = '<?php echo self::getValidHash()?>';
+                try{
+                    $.getJSON("<?php echo url()->getModifiedUri(false)?>", params, function(data){
+                        if(data.error){
+                            $(".update-check").html(data.error);
+                        }else if(data.version && data.update){
+                            $(".update-check").html((<?php echo json_encode(t("update.18"))?>+'<br/><br/>').replace(/\%s/, data.version)).append(
+                                $('<input type="button" class="btn" value="<?php echo t("update.16")?>"/>').one("click", function(){
+                                    if(confirm('<?php echo t("update.17")?>')){
+                                        this.value = '<?php echo t("update.13")?>';
+                                        req("start");
+                                    }
+                                })
+                            );
+                        }else if(data.version && !data.update){
+                            $(".update-check").html('<?php echo t("update.6")?>');
+                        }
+                    });
+                }catch(e){
+                    $(".update-check").html(e.message);
+                }
+            }
         })();
         </script>
         <?php

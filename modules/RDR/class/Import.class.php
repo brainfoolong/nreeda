@@ -68,14 +68,14 @@ class RDR_Import{
                     }
                 }
                 $favUrl = $url["scheme"]."://".$url["host"]."/favicon.{$type}";
-                $favData = @file_get_contents($favUrl);
+                $favData = RDR_FileContents::get($favUrl);
                 if($favData){
                     file_put_contents($filename, $favData);
                     return;
                 }
                 if($type == "png"){
                     $favUrl = $url["scheme"]."://".$url["host"]."/apple-touch-icon.{$type}";
-                    $favData = @file_get_contents($favUrl);
+                    $favData = RDR_FileContents::get($favUrl);
                     if($favData){
                         file_put_contents($filename, $favData);
                         return;
@@ -255,60 +255,14 @@ class RDR_Import{
     }
 
     /**
-    * Get contents from a url
-    *
-    * @param mixed $url
-    * @return string
-    */
-    static function getURLContent($url){
-        $dir = CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp";
-        $file = "{$dir}/import.".md5($url);
-        if(!file_exists($file) || filemtime($file) < time() - 300){
-            $data = self::fileGetContents($url);
-            if(!$data){
-                RDR_Event::log(RDR_Event::TYPE_FEED_URLERROR, array("text" => $url));
-                return;
-            }
-            file_put_contents($file, $data);
-        }else{
-            $data = self::fileGetContents($file);
-        }
-        return $data;
-    }
-
-    /**
-    * File get contents with correct headers
-    *
-    * @param mixed $url
-    * @return string
-    */
-    static private function fileGetContents($url){
-        if(!preg_match("~^http|https~i", $url) && file_exists($url)) return file_get_contents($url);
-        $context = stream_context_create(array(
-            'http'=>array(
-                'method'=>"GET",
-                'header'=>
-                    "Accept: text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8\r\n" .
-                    "Accept-Language: en-US,en;q=0.8\r\n".
-                    "Keep-Alive: timeout=3, max=10\r\n",
-                    "Connection: keep-alive",
-                'user_agent'=>"User-Agent: Mozilla/5.0 (Windows NT 6.1) AppleWebKit/535.11 (KHTML, like Gecko) Chrome/17.0.963.66 Safari/535.11",
-                "ignore_errors" => true
-            )
-        ));
-        $data = @file_get_contents($url, false, $context);
-        return $data;
-    }
-
-    /**
     * Get Simple xml from a feed url
     *
     * @param mixed $url
     * @return SimpleXMLElement | bool
     */
     static private function getSimpleXMLFromUrl($url){
-        $data = self::getURLContent($url);
-        if(!$data) return false;
+        $data = RDR_FileContents::get($url);
+        if($data === false) return false;
         $xml = @simplexml_load_string($data, NULL, LIBXML_NOCDATA);
         if(!$xml){
             RDR_Event::log(RDR_Event::TYPE_SIMPLEXML_ERROR, array("text" => $url));

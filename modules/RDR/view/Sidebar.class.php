@@ -121,8 +121,8 @@ class RDR_Sidebar extends CHOQ_View{
                     <div class="sub-container">
                         <div><a href="<?php echo l("RDR_Admin_System")?>" class="sub"><?php echo t("sidebar.17")?></a></div>
                         <div><a href="<?php echo l("RDR_Admin_Settings")?>" class="sub"><?php echo t("sidebar.18")?></a></div>
-                        <div><a href="<?php echo l("RDR_Admin_User")?>" class="sub" data-noparams="1"><?php echo t("sidebar.19")?></a></div>
                         <div><a href="<?php echo l("RDR_Admin_Update")?>" class="sub"><?php echo t("sidebar.26")?></a></div>
+                        <div><a href="<?php echo l("RDR_Admin_User")?>" class="sub" data-noparams="1"><?php echo t("sidebar.19")?></a></div>
                     </div>
                     <div class="line"><div class="inner"></div></div>
                 <?php }?>

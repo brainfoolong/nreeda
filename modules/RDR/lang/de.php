@@ -31,6 +31,7 @@ $translations = array(
     "event.14" => "%s alte Eventlog Einträge wurden gelöscht",
     "event.15" => "%s Feeds wurden gelöscht da sie von niemanden mehr gebraucht werden",
     "event.16" => "Ein anderer Cronjob läuft gerade... Abbruch",
+    "event.17" => "Fehler beim laden der URL '%s'",
     "uncategorized" => "Nicht kategorisiert",
     "user.1" => "Administrator",
     "user.2" => "Benutzer",
@@ -133,7 +134,7 @@ $translations = array(
     "sidebar.14" => "Einstellungen",
     "sidebar.15" => "RSS Export",
     "sidebar.16" => "Administration",
-    "sidebar.17" => "System Tasks",
+    "sidebar.17" => "Systemaufgaben",
     "sidebar.18" => "Systemeinstellungen",
     "sidebar.19" => "Benutzer",
     "sidebar.21" => "Suchen",
@@ -175,4 +176,33 @@ $translations = array(
     "browserscript.bookmark" => "Speichere dir einfach diesen Link als Bookmark / Favorit ab. Wenn du dann auf einer Seite diesen Link öffnest werden automatisch alle Feeds erkannt, aufgelistet und du kannst mit nur einem Klick die Feeds zu deiner Sammlung hinzufügen.",
     "browserscript.nofeed" => "Keine Feeds auf dieser Seite gefunden",
     "browserscript.forward" => "Es wurden %s Feeds gefunden - zu nReeda hinzufügen?",
+    "update.1" => "Cronjob läuft gerade, bitte versuche es später wieder",
+    "update.2" => '<b>Wartungsmodus aktiviert</b>
+
+    Falls du Probleme mit dem Update hast und im Wartungsmodus hängen bleibst kannst du mit folgender URL den Wartungsmodus manuell deaktivieren
+    If you have any troubles with the update and you stuck in maintenance mode than run the following url to manually disable maintenance mode
+    <u>%s</u>
+
+    Du kannst auch den Wartungsmodus deaktivieren indem du in der _RDR.local.php Datei die Zeile <u>%s</u> entfernst
+
+    Kontaktiere GIT für verfügbare Updates...',
+    "update.3" => "Ein paar nReeda Dateien/Verzeichnisse (%s) sind schreibgeschützt. Bitte setze korrekte CHMOD und Dateirechte",
+    "update.4" => "Fehler beim laden der Updates vom GIT , versuche es später erneut",
+    "update.5" => "Neue Version '%s' gefunden. Hole neuen Dateien von GIT...",
+    "update.6" => "Du bist bereits am aktuellen Stand. Wahnsinn.",
+    "update.8" => "Konnte URL nicht laden '%s'",
+    "update.9" => "Dateien erfolgreich heruntergeladen, Update beginnt jetzt, danach aktualisieren wir gleich die Datenbank",
+    "update.10" => "Dateien und Datenbank erfolgreich aktualisiert, letzte Aufräumarbeiten werden gemacht...",
+    "update.11" => "Alles ist nun absolut atemberaubend. Erfreue dich weiterhin an nReeda",
+    "update.12" => "Fertig
+
+    <b>Wartungsmodus deaktiviert</b>",
+    "update.13" => "Update wird gerade ausgeführt...",
+    "update.14" => 'Benutze diesen One Click Updater um nReeda auf die neueste stabile Version zu aktualisieren.
+    Vergiss nicht ein Backup deiner Datenbank und des nReeda Verzeichnisses zu machen, für das Worst Case Szenario',
+    "update.15" => "Du musst die 'zip' Erweiterung in deiner PHP Konfiguration ",
+    "update.16" => "Update jetzt durchführen",
+    "update.17" => "Bist du sicher? Auch schon ein Backup von der Datenbank und nReeda Verzeichnis gemacht?",
+    "update.18" => "Update auf Version '%s' verfügbar",
+    "update.19" => "Suchen nach neuen Updates...",
 );

@@ -29,11 +29,6 @@ class RDR_Admin_System extends CHOQ_View{
                     RDR_Import::importFeedEntries($feed);
                 }
             }
-            if(post("updateDb")){
-                $generator = CHOQ_DB_Generator::create(db());
-                $generator->addModule("RDR");
-                $generator->updateDatabase();
-            }
             return;
         }
         view("RDR_BasicFrame", array("view" => $this));
@@ -82,12 +77,6 @@ class RDR_Admin_System extends CHOQ_View{
 
         <script type="text/javascript">
         (function(){
-            $("input.update-db").on("click", function(){
-                Global.message("Updating...");
-                $.post('<?php echo url()->getUri()?>', {updateDb : 1}, function(){
-                    Global.message("<?php echo t("admin.update.10")?>");
-                })
-            });
             $("#content div.update-feed.inline-btn").on("click", function(){
                 $("img.loading-feed").hide();
                 pipeline = [$(this).attr("data-id")];

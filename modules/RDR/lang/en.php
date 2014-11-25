@@ -32,6 +32,7 @@ $translations = array(
     "event.14" => "%s old eventlog entries deleted",
     "event.15" => "%s feeds have been deleted because nobody have it in use anymore",
     "event.16" => "Another Cronjob is already running... Skip",
+    "event.17" => "Error while fetching url '%s'",
     "uncategorized" => "Uncategorized",
     "user.1" => "Administrator",
     "user.2" => "User",
@@ -138,8 +139,8 @@ $translations = array(
     "sidebar.14" => "Settings",
     "sidebar.15" => "RSS Export",
     "sidebar.16" => "Administration",
-    "sidebar.17" => "System Tasks",
-    "sidebar.18" => "System Settings",
+    "sidebar.17" => "Systemtasks",
+    "sidebar.18" => "Systemsettings",
     "sidebar.19" => "Users",
     "sidebar.20" => "Bye Bye",
     "sidebar.21" => "Search",
@@ -147,7 +148,7 @@ $translations = array(
     "sidebar.23" => "Small Articles",
     "sidebar.24" => "Pro Tip: ",
     "sidebar.25" => "Browser Script for more comfort",
-    "sidebar.26" => "System Update",
+    "sidebar.26" => "Systemupdate",
     "admin.settings.1" => "System Settings",
     "admin.settings.2" => "Delete entries older than...",
     "admin.settings.3" => "Delete eventlog older than...",
@@ -183,4 +184,33 @@ $translations = array(
     "browserscript.bookmark" => "Save the following URL in your favorites / bookmarks. If you be on a page that you want to subscribe you just need click on the saved bookmark.",
     "browserscript.nofeed" => "No feeds found on this page",
     "browserscript.forward" => "%s Feeds found on this page - Add to nReeda now?",
+    "update.1" => "Cronjob is currently running, please try again later",
+    "update.2" => '<b>Maintenance Mode enabled</b>
+
+    If you have any troubles with the update and you stuck in maintenance mode than run the following url to manually disable maintenance mode
+    <u>%s</u>
+
+    You can also disable maintenance mode by removing the line <u>%s</u> from your _RDR.local.php file
+
+    Contacting GIT for available updates...',
+    "update.3" => "Some nReeda files/directories (%s) are not writeable by the updater. Please set correct CHMOD and file permissions",
+    "update.4" => "Failed on getting updates from the GIT repository, please try again later",
+    "update.5" => "New Version '%s' found... Fetching new files from GIT...",
+    "update.6" => "You are already up2date with the latest available version of nReeda. Awesome.",
+    "update.7" => "Execution Error: %s",
+    "update.8" => "Could not load the URL '%s'",
+    "update.9" => "Files successfully downloaded, updating files right now, after that, we update the database...",
+    "update.10" => "Files and database updated successfully, doing some house cleaning...",
+    "update.11" => "Everything is now absolutely amazing. Have fun.",
+    "update.12" => "Finished
+
+    <b>Maintenance Mode disabled</b>",
+    "update.13" => "Update in progress...",
+    "update.14" => 'Use this one click updater to update nReeda to the newest stable version.
+            Don\'t forget to backup your database and nreeda directory before doing this step, in the case of a problem with the update.',
+    "update.15" => "You must enable the 'zip' extension in your PHP config to use the auto updater",
+    "update.16" => "Update right now",
+    "update.17" => "Are you sure? Do you have a backup of your database and the nreeda folder for the worst case scenario?",
+    "update.18" => "Update to version '%s' available",
+    "update.19" => "Checking for updates...",
 );

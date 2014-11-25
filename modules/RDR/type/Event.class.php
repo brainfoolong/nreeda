@@ -30,7 +30,6 @@ class RDR_Event extends CHOQ_DB_Object{
     const TYPE_FEED_EXIST = 8;
     const TYPE_SIMPLEXML_ERROR = 7;
     const TYPE_CRON_START = 3;
-    const TYPE_CRON_RUNNING = 16;
     const TYPE_CRON_END = 4;
     const TYPE_ERROR = 9;
     const TYPE_OPML_OK = 10;
@@ -39,6 +38,8 @@ class RDR_Event extends CHOQ_DB_Object{
     const TYPE_CLEANUP_ENTRY = 13;
     const TYPE_CLEANUP_EVENT = 14;
     const TYPE_CLEANUP_FEEDS = 15;
+    const TYPE_CRON_RUNNING = 16;
+    const TYPE_URL_ERROR = 17;
 
     /**
     * The last create event

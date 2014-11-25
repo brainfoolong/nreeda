@@ -74,7 +74,7 @@ class RDR_Cron extends CHOQ_View{
 
         # skip when cron is already running
         if(self::isRunning()){
-            RDR_Event::log(RDR_Event::TYPE_CRON_START);
+            RDR_Event::log(RDR_Event::TYPE_CRON_RUNNING);
             return;
         }
         # create a tmp file that show us the cron pid
@@ -87,14 +87,16 @@ class RDR_Cron extends CHOQ_View{
         RDR_Event::log(RDR_Event::TYPE_CRON_END);
         RDR_Cleanup::cleanupEvents();
         RDR_Cleanup::cleanupEntries();
+        RDR_FileContents::cleanupTmpFiles();
 
-        # delete tmp file that show us the cron pid
-        unlink(CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/cron.pid");
-
+        # optimizing tables
         $generator = CHOQ_DB_Generator::create(db());
         if($generator instanceof CHOQ_DB_Generator_Mysql){
             $generator->addModule("RDR");
             $generator->optimizeTables();
         }
+
+        # delete tmp file that show us the cron pid
+        unlink(CHOQ_ACTIVE_MODULE_DIRECTORY."/tmp/cron.pid");
     }
 }
