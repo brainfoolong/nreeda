@@ -2,7 +2,7 @@ nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
 ======
 
 #### Breaking change on update
-When you have already installed nReeda and when you update to 1.1.0 you need to update one file manually.
+When you have already installed nReeda and when you update to 1.1.0 or higher you need to update one file manually.
 Upload/Override all files manually as always, than open
 `modules/RDR/_RDR.local.php` and remove the first parameter of CHOQ\_DB::add 
 ```
