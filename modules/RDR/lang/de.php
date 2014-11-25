@@ -205,4 +205,9 @@ $translations = array(
     "update.17" => "Bist du sicher? Auch schon ein Backup von der Datenbank und nReeda Verzeichnis gemacht?",
     "update.18" => "Update auf Version '%s' verfügbar",
     "update.19" => "Suchen nach neuen Updates...",
+    "dbupdate.1" => "Datenbank Update wird benötigt",
+    "dbupdate.2" => "Du hast nReeda aktualisiert und musst jetzt die Datenbank updaten.
+        Bitte mache ein Backup der Datenbank vor diesem Schritt.
+        Nach dem erfolgreichen Update wirst du auf das Dashboard weitergeleitet",
+    "dbupdate.3" => "Datenbank jetzt aktualisieren",
 );

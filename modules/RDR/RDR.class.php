@@ -36,7 +36,7 @@ class RDR extends CHOQ_Module{
     public function onInit(){
 
         html()->pageTitle = "nReeda - Web-based Open Source RSS/XML/Atom Feed Reader";
-        define("RDR_VERSION", "1.1.0");
+        define("RDR_VERSION", "1.1.1");
 
         $devFile = __DIR__."/_RDR.dev.php";
         $localFile = __DIR__."/_RDR.local.php";
@@ -111,7 +111,7 @@ function inNormalMode(){
 */
 function user(){
     if(!inNormalMode()) return;
-    if(RDR_User::$user) return RDR_User::$user;
+    if(RDR_User::$user !== NULL) return RDR_User::$user;
     if(cookie("user-id") && cookie("user-id-salted") && cookie("user-id-salted") == saltedHash("sha256", cookie("user-id"))){
         $user = RDR_User::getById(cookie("user.id"));
         RDR_User::$user = $user;

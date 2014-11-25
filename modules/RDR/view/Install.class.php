@@ -67,13 +67,12 @@ class RDR_Install extends CHOQ_View{
 
                 $tables = $generator->getExistingTables();
                 foreach($tables as $table) {
-                    if($table == "_choqled_metadata" || substr(strtolower($table), 0, 3) == "RDR_"){
+                    if($table == "_choqled_metadata" || substr(strtolower($table), 0, 3) == "rdr_"){
                         db()->query("DROP TABLE ".db()->quote($table));
                     }
                 }
 
-                $generator->addModule("RDR");
-                $generator->updateDatabase();
+                RDR_DBUpdate::run();
 
                 $user = new RDR_User(db());
                 $user->username = post("admin-user");

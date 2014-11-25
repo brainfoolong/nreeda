@@ -98,6 +98,17 @@ class RDR_User extends CHOQ_DB_Object{
     }
 
     /**
+    * Logout user
+    */
+    static function logout(){
+        self::$user = false;
+        session("name");
+        session_unset();
+        cookie("user-id", 0, 0);
+        cookie("user-id-salted", 0, 0);
+    }
+
+    /**
     * Load the readed flags for the given ids
     *
     * @param array $ids

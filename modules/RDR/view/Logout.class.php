@@ -20,10 +20,7 @@ class RDR_Logout extends CHOQ_View{
     * On load not implemented
     */
     public function onLoad(){
-        session("name");
-        session_unset();
-        cookie("user-id", 0, 0);
-        cookie("user-id-salted", 0, 0);
+        RDR_User::logout();
         redirect(l("RDR_Home"), 302);
     }
 }

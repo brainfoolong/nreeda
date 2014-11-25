@@ -213,4 +213,9 @@ $translations = array(
     "update.17" => "Are you sure? Do you have a backup of your database and the nreeda folder for the worst case scenario?",
     "update.18" => "Update to version '%s' available",
     "update.19" => "Checking for updates...",
+    "dbupdate.1" => "Update for your database is required",
+    "dbupdate.2" => "You have updated nReeda and a database update is required.
+            Please update your database before you do the automatic update.
+            After the update you will be redirected to the Dashboard if everything works fine.",
+    "dbupdate.3" => "Update Database now",
 );

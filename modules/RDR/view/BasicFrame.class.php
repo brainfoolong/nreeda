@@ -22,6 +22,10 @@ class RDR_BasicFrame extends CHOQ_View{
     public function onLoad(){
         # load the view
         $view = $this->getParam("view");
+        if(RDR_DBUpdate::updateRequired()){
+            RDR_User::$user = false;
+            $view = new RDR_DBUpdate();
+        }
         ob_start();
         $view->getContent();
         $content = ob_get_contents();

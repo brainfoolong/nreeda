@@ -149,11 +149,7 @@ class RDR_Admin_Update extends CHOQ_View{
                 break;
                 case "db":
                     try{
-                        # updating database
-                        $generator = CHOQ_DB_Generator::create(db());
-                        $generator->addModule("RDR");
-                        $generator->updateDatabase();
-
+                        RDR_DBUpdate::run();
                         $data = array("message" => t("update.10"), "event" => "success", "next" => "cleanup");
                     }catch(Exception $e){
                         $data = array("message" => sprintf(t("update.7"), $e->getMessage()), "event" => "error");
