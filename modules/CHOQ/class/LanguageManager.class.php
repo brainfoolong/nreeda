@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * Language Manager
@@ -71,7 +71,7 @@ class CHOQ_LanguageManager{
     /**
     * Set a language fallback for translations
     *
-    * @param string $language NULL or the langcode for the fallback
+    * @param string $language null or the langcode for the fallback
     */
     static function setFallback($language){
         self::$languageFallback = $language;
@@ -80,7 +80,7 @@ class CHOQ_LanguageManager{
     /**
     * Set language by users browser settings
     *
-    * @return string|NULL The determined Language
+    * @return string|null The determined Language
     */
     static function setLanguageByBrowserSettings(){
         $userLanguage = arrayValue($_SERVER, "HTTP_ACCEPT_LANGUAGE");
@@ -101,7 +101,7 @@ class CHOQ_LanguageManager{
     * Set language from current uri
     * This only happens if url()->languageInUri is true
     *
-    * @return string|NULL The determined Language
+    * @return string|null The determined Language
     */
     static function setLanguageByUri(){
         if(url()->languageInUri){
@@ -122,12 +122,12 @@ class CHOQ_LanguageManager{
     * Of no translation was found try the fallback
     *
     * @param string $key
-    * @param string|NULL $lang If not specified the current language will be taken
-    * @param bool $returnKeyIfNot If false than NULL will be returned
-    * @return string|NULL
+    * @param string|null $lang If not specified the current language will be taken
+    * @param bool $returnKeyIfNot If false than null will be returned
+    * @return string|null
     */
-    static function getTranslation($key, $lang = NULL, $returnKeyIfNot = true){
-        if($lang === NULL) {
+    static function getTranslation($key, $lang = null, $returnKeyIfNot = true){
+        if($lang === null) {
             if(!self::$language) error("No language activated - use ".__CLASS__."::setLanguage");
             $lang = self::$language;
         }
@@ -135,7 +135,7 @@ class CHOQ_LanguageManager{
             self::$translations[$lang] = array();
             foreach(CHOQ_Module::$instances as $module){
                 $path = $module->directory.DS."lang".DS.$lang.".php";
-                $translations = NULL;
+                $translations = null;
                 if(file_exists($path)){
                     include($path);
                     if($translations) foreach($translations as $k => $value) self::$translations[$lang][$k] = $value;

@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * Sqlite3 DB Handler
@@ -84,7 +84,7 @@ class CHOQ_DB_Sqlite3 extends CHOQ_DB_Sql{
     *  array is the value of the field 'name'
     * @return array[]
     */
-    public function fetchAsAssoc($query, $valueAsArrayIndex = NULL){
+    public function fetchAsAssoc($query, $valueAsArrayIndex = null){
         $fetch = array();
         $this->query($query);
         while($row = $this->lastResult->fetchArray(SQLITE3_ASSOC)){
@@ -116,7 +116,7 @@ class CHOQ_DB_Sqlite3 extends CHOQ_DB_Sql{
     * @throws CHOQ_Exception
     * @param string $query
     */
-    public function testError($query = NULL){
+    public function testError($query = null){
         if($this->sqlite->lastErrorCode()){
             $error = $this->sqlite->lastErrorMsg();
             if($query) $error .= "\nSQL Query: $query";

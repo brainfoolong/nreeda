@@ -122,7 +122,7 @@ function error($message, $code = 500){
 * Get a array with the property values from another array
 *
 * @param array $array
-* @param string $property If NULL and the value is a array the first value returned
+* @param string $property If null and the value is a array the first value returned
 * @return array
 */
 function arrayMapProperty(&$array, $property){
@@ -136,7 +136,7 @@ function arrayMapProperty(&$array, $property){
                 $return[$key] = $value->{$property};
             }
         }elseif(is_array($value)){
-            if($property === NULL){
+            if($property === null){
                 $return[$key] = array_shift($value);
             }else{
                 $return[$key] = $value[$property];
@@ -168,7 +168,7 @@ function arraySortProperty(&$array, $property, $sort = SORT_ASC){
 * @param mixed $parameters Parameters to pass to the method
 * @return array
 */
-function arrayCallMethod(&$array, $method, $parameters = NULL){
+function arrayCallMethod(&$array, $method, $parameters = null){
     if(!$array || !is_array($array)) return array();
     $return = array();
     foreach($array as $value){
@@ -197,7 +197,7 @@ function arrayReIndex(array &$array){
 * @param mixed $default The value the returned by default if a key is not set
 * @return mixed
 */
-function arrayValue(&$arr, $key, $default = NULL){
+function arrayValue(&$arr, $key, $default = null){
     if(!$arr) return $default;
     if(isset($arr[$key])){
         return $arr[$key];
@@ -261,9 +261,9 @@ function post($key){
 * @param int $expire A unix timestamp how long the cookie is valid, 0 for session like behaviour
 * @return mixed
 */
-function cookie($key, $value = NULL, $expire = 0){
+function cookie($key, $value = null, $expire = 0){
     $key = slugify($key);
-    if($value === NULL) return convertEncoding(arrayValue($_COOKIE, $key));
+    if($value === null) return convertEncoding(arrayValue($_COOKIE, $key));
     $value = (string)$value;
     $_COOKIE[$key] = $value;
     setcookie(
@@ -283,14 +283,14 @@ function cookie($key, $value = NULL, $expire = 0){
 * @param string $value The value to set
 * @return mixed
 */
-function session($key, $value = NULL){
+function session($key, $value = null){
     if(defined("CHOQ_SESSIONID_CORRUPT") && CHOQ_SESSIONID_CORRUPT) return;
     if(session_id() === "") {
         # check for session id to be correct
         # if not skip activating the session
         $sessionName = session_name();
-        $sessionId = isset($_COOKIE[$sessionName]) ? $_COOKIE[$sessionName] : NULL;
-        if($sessionId !== NULL && (strlen($sessionId) < 22 || strlen($sessionId) > 40 || preg_match("~[^a-zA-Z0-9,\-]~i", $sessionId))){
+        $sessionId = isset($_COOKIE[$sessionName]) ? $_COOKIE[$sessionName] : null;
+        if($sessionId !== null && (strlen($sessionId) < 22 || strlen($sessionId) > 40 || preg_match("~[^a-zA-Z0-9,\-]~i", $sessionId))){
             define("CHOQ_SESSIONID_CORRUPT", true);
             return;
         }
@@ -302,7 +302,7 @@ function session($key, $value = NULL){
         if($savedUid && $savedUid != $currentUid) $_SESSION = array();
         $_SESSION["__choquid__"] = $currentUid;
     }
-    if($value === NULL) return arrayValue($_SESSION, $key);
+    if($value === null) return arrayValue($_SESSION, $key);
     $_SESSION[$key] = $value;
 }
 
@@ -353,8 +353,8 @@ function dump(){
 * @param bool $return If set to true than the output will be returned instead of direct write to output buffer
 * @return string|void
 */
-function view($viewClass, $parameters = NULL, $return = false){
-    if($parameters !== NULL && !is_array($parameters)) error("view() \$parameters is not from type array");
+function view($viewClass, $parameters = null, $return = false){
+    if($parameters !== null && !is_array($parameters)) error("view() \$parameters is not from type array");
     $instance = new $viewClass;
     $instance->parameters = $parameters;
     if($return) ob_start();
@@ -382,8 +382,8 @@ function html(){
 * @param mixed $value
 * @return mixed
 */
-function v($key, $value = NULL){
-    if($value === NULL) return CHOQ_Var::get($key);
+function v($key, $value = null){
+    if($value === null) return CHOQ_Var::get($key);
     CHOQ_Var::add($key, $value);
 }
 
@@ -403,11 +403,11 @@ function redirect($url, $code = 302){
 * Get translation for a specified key
 *
 * @param string $key
-* @param string|NULL $lang If not specified the current language will be taken
-* @param bool $returnKeyIfNot If false than NULL will be returned
-* @return string|NULL
+* @param string|null $lang If not specified the current language will be taken
+* @param bool $returnKeyIfNot If false than null will be returned
+* @return string|null
 */
-function t($key, $lang = NULL, $returnKeyIfNot = true){
+function t($key, $lang = null, $returnKeyIfNot = true){
     return CHOQ_LanguageManager::getTranslation($key, $lang, $returnKeyIfNot);
 }
 
@@ -421,7 +421,7 @@ function t($key, $lang = NULL, $returnKeyIfNot = true){
 * @param string $language If set than you can override the language, otherwise the current language is taken
 * @return string
 */
-function l($viewClass, $params = NULL, $priority = 0, $language = NULL){
+function l($viewClass, $params = null, $priority = 0, $language = null){
     return CHOQ_View::linkToView($viewClass, $params, $priority, $language);
 }
 
@@ -456,7 +456,7 @@ function dt($time){
 * @param mixed $id The instance id
 * @return CHOQ_Cache
 */
-function cache($id = NULL){
+function cache($id = null){
     return CHOQ_Cache::getInstance($id);
 }
 
@@ -466,7 +466,7 @@ function cache($id = NULL){
 * @param mixed $id The instance id
 * @return CHOQ_DB
 */
-function db($id = NULL){
+function db($id = null){
     return CHOQ_DB::get($id);
 }
 

@@ -42,14 +42,14 @@ class RDR_Admin_Update extends CHOQ_View{
     */
     public function onLoad(){
         if(req()->isAjax() && get("code") == self::getValidHash()){
-            $data = NULL;
+            $data = null;
             switch(get("action")){
                 case "update-check":
                     # fetching branches from GIT
                     $data = array("error" => t("update.4"));
                     $branches = self::getGitJSON("https://api.github.com/repos/brainfoolong/nreeda/branches");
                     if($branches){
-                        $newest = NULL;
+                        $newest = null;
                         foreach($branches as $branch){
                             if($branch["name"] == "master") continue;
                             if(!$newest || version_compare($branch["name"], $newest, ">")){

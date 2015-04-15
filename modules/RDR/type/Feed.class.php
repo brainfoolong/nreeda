@@ -50,7 +50,7 @@ class RDR_Feed extends CHOQ_DB_Object{
     /**
     * Get url to locally stored favicon
     *
-    * @return string | NULL
+    * @return string | null
     */
     public function getFaviconUrl(){
         $fileTypes = array("ico", "gif", "jpg", "png");

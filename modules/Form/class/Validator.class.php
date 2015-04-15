@@ -43,7 +43,7 @@ abstract class Form_Validator{
     * Get option value
     *
     * @param mixed $key
-    * @return string | NULL
+    * @return string | null
     */
     public function getOption($key){
         return arrayValue($this->options, $key);
@@ -57,7 +57,7 @@ abstract class Form_Validator{
     * @return self
     */
     public function addOption($key, $value){
-        if($value === NULL) return $this;
+        if($value === null) return $this;
         $key = (string)$key;
         $value = (string)$value;
         $this->options[$key] = $value;

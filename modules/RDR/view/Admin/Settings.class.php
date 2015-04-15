@@ -32,7 +32,7 @@ class RDR_Admin_Settings extends CHOQ_View{
         $this->form = $this->getForm();
         if(post("save")){
             foreach($this->form->fields as $field){
-                if($field->attributes->get("data-setting")){
+                if($field->attr->get("data-setting")){
                     RDR_Setting::set($field->name, $field->getSubmittedValue());
                 }
             }
@@ -66,7 +66,7 @@ class RDR_Admin_Settings extends CHOQ_View{
         $form->addField($field);
 
         $field = new Form_Field_Select("maxentrylifetime", t("admin.settings.2"));
-        $field->attributes->add("data-setting", 1);
+        $field->attr->add("data-setting", 1);
         $field->addOption("", t("admin.settings.4"));
         $field->addOption("-1 month", "1 ".t("months"));
         $field->addOption("-2 month", "2 ".t("months"));
@@ -77,7 +77,7 @@ class RDR_Admin_Settings extends CHOQ_View{
         $form->addField($field);
 
         $field = new Form_Field_Select("maxeventlifetime", t("admin.settings.3"));
-        $field->attributes->add("data-setting", 1);
+        $field->attr->add("data-setting", 1);
         $field->addOption("", "1 ".t("days"));
         $field->addOption("-2 day", "2 ".t("days"));
         $field->addOption("-3 days", "3 ".t("days"));

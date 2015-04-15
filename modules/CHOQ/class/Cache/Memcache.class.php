@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * Memcache Cache
@@ -54,12 +54,12 @@ class CHOQ_Cache_Memcache extends CHOQ_Cache{
     * Store a value in the cache
     *
     * @param string $key The cache key
-    * @param mixed $value Any value to store, if NULL remove the entry
-    * @param CHOQ_DateTime|int|NULL $expires
+    * @param mixed $value Any value to store, if null remove the entry
+    * @param CHOQ_DateTime|int|null $expires
     *   If integer than the expire time is = now + $expire
-    *   If NULL than no expire is set
+    *   If null than no expire is set
     */
-    public function set($key, $value, $expires = NULL){
+    public function set($key, $value, $expires = null){
         if($expires && is_object($expires)){
             $expires = $expires->getUnixtime();
         }if($expires && is_int($expires)){
@@ -68,7 +68,7 @@ class CHOQ_Cache_Memcache extends CHOQ_Cache{
             $expires = 0;
         }
         $key = saltedHash("crc32b", $key);
-        if($value === NULL){
+        if($value === null){
             $this->memcache->delete($key);
         }else{
             $compress = (is_bool($value) || is_int($value) || is_float($value)) ? false : MEMCACHE_COMPRESSED;
@@ -79,7 +79,7 @@ class CHOQ_Cache_Memcache extends CHOQ_Cache{
 
     /**
     * Get value from cache
-    * NULL returned if key not found
+    * null returned if key not found
     *
     * @param string $key The cache key
     * @return mixed|false False if key not found OR value is false

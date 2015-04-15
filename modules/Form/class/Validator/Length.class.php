@@ -23,7 +23,7 @@ class Form_Validator_Length extends Form_Validator{
     * @param int $max
     * @return Form_Validator
     */
-    public function setLength($min = NULL, $max = NULL){
+    public function setLength($min = null, $max = null){
         return $this->addOption("min", $min)->addOption("max", $max);
     }
 
@@ -42,8 +42,8 @@ class Form_Validator_Length extends Form_Validator{
             return true;
         }
         $length = mb_strlen($submittedValue);
-        if($this->getOption("min") !== NULL && $length < $this->getOption("min")) return false;
-        if($this->getOption("max") !== NULL && $length > $this->getOption("max")) return false;
+        if($this->getOption("min") !== null && $length < $this->getOption("min")) return false;
+        if($this->getOption("max") !== null && $length > $this->getOption("max")) return false;
         return true;
     }
 }

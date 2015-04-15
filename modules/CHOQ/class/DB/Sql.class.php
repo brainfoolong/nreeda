@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * Abstract SQL Database Basic
@@ -119,7 +119,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
     *  array is the value of the field 'name'
     * @return array
     */
-    public function fetchColumn($query, $valueAsArrayIndex = NULL){
+    public function fetchColumn($query, $valueAsArrayIndex = null){
         $arr = $this->fetchAsAssoc($query, $valueAsArrayIndex);
         if($arr){
             return array_combine(array_keys($arr), arrayMapProperty($arr, NULL));
@@ -131,7 +131,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
     * Fetch first column value of first row
     *
     * @param string $query
-    * @return string|NULL
+    * @return string|null
     */
     public function fetchOne($query){
         $arr = $this->fetchAsAssocOne($query);
@@ -141,9 +141,9 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
     /**
     * Get object by id
     *
-    * @param string|NULL $type If NULL than auto detect the type
+    * @param string|null $type If null than auto detect the type
     * @param int $id
-    * @return CHOQ_DB_Object|NULL
+    * @return CHOQ_DB_Object|null
     */
     public function getById($type, $id){
         $tmp = $this->getByIds($type, array($id));
@@ -153,7 +153,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
     /**
     * Get objects by ids
     *
-    * @param string|NULL $type If NULL than auto detect the type
+    * @param string|null $type If null than auto detect the type
     * @param array $id
     * @param bool $resort If true than the resulted array is in the same sort as the given ids
     * @return CHOQ_DB_Object[]
@@ -201,7 +201,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
     * Get objects by condition
     *
     * @param string $type
-    * @param string|NULL $condition If NULL than no condition is added (getAll)
+    * @param string|null $condition If null than no condition is added (getAll)
     *   To add a parameters placeholder add brackets with the parameters key - Example: {mykey}
     *   To quote fieldNames correctly enclose a fieldName with <fieldName>
     * @param mixed $parameters Can be a array of parameters, a single parameter or NULL
@@ -209,22 +209,22 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
     *   Sort value must be a fieldName with a +/- prefix - Example: -id
     *   + means sort ASC
     *   - means sort DESC
-    * @param int|NULL $limit Define a limit for the query
-    * @param int|NULL $offset Define a offset for the query
+    * @param int|null $limit Define a limit for the query
+    * @param int|null $offset Define a offset for the query
     * @return CHOQ_DB_Object[]
     */
-    public function getByCondition($type, $condition = NULL, $parameters = NULL, $sort = NULL, $limit = NULL, $offset = NULL){
+    public function getByCondition($type, $condition = null, $parameters = null, $sort = null, $limit = null, $offset = null){
         $t = CHOQ_DB_Type::get($type);
         if(!$t) error("Cannot fetch '{$type}' - doesn't exist");
         $query = "SELECT * FROM ".$this->quote($type);
-        if($condition !== NULL){
-            if($parameters !== NULL){
+        if($condition !== null){
+            if($parameters !== null){
                 if(!is_array($parameters)) $parameters = array($parameters);
                 foreach($parameters as $key => $value) $condition = str_replace('{'.$key.'}', $this->toDb($value), $condition);
             }
             $query .= " WHERE $condition";
         }
-        if($sort !== NULL){
+        if($sort !== null){
             if(!is_array($sort)) $sort = array($sort);
             $query .= " ORDER BY ";
             foreach($sort as $value) {
@@ -280,7 +280,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
         foreach($members as $member){
             if(!$id || isset($object->_changes[$member->name])){
                 $value = $object->{$member->name};
-                if($value !== NULL){
+                if($value !== null){
                     if($member->fieldType == "array"){
                         $value = count($value);
                         $dbValue = (string)$value;
@@ -288,15 +288,15 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
                         $dbValue = $member->convertToDbValue($value);
                     }
                 }else{
-                    $dbValue = NULL;
+                    $dbValue = null;
                 }
 
-                if(!$member->optional && $dbValue === NULL) {
+                if(!$member->optional && $dbValue === null) {
                     error("'$member' is not optional - Must be set ".$value);
                 }
                 $existingDbValue = arrayValue($object->_dbValues, $member->name);
                 if(!$id || $member->fieldType == "array" || $existingDbValue !== $dbValue || (string)$existingDbValue !== (string)$dbValue){
-                    $object->_dbValues[$member->name] = $dbValuesChanged[$member->name] = $dbValue !== NULL ? (string)$dbValue : NULL;
+                    $object->_dbValues[$member->name] = $dbValuesChanged[$member->name] = $dbValue !== null ? (string)$dbValue : NULL;
                 }
             }
         }
@@ -311,7 +311,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
             $query = substr($query, 0, -2).")";
             $this->query($query);
         }else{
-            $set = NULL;
+            $set = null;
             foreach($dbValuesChanged as $key => $value){
                 $set .= $this->quote($key)." = ".$this->toDb($value).", ";
             }
@@ -351,7 +351,7 @@ abstract class CHOQ_DB_Sql extends CHOQ_DB{
             }
         }
         CHOQ_DB_Object::_addToCache($object);
-        $object->_changes = NULL;
+        $object->_changes = null;
     }
 
     /**

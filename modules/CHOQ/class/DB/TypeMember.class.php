@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * DB Type Members
@@ -160,10 +160,10 @@ class CHOQ_DB_TypeMember{
     * @param string $arrayType If $type is "array" than you must define the real type for the array
     * @return CHOQ_DB_TypeMember
     */
-    public function setFieldType($type, $arrayType = NULL){
+    public function setFieldType($type, $arrayType = null){
         $tmp = array($type, $arrayType);
         foreach($tmp as $index => $value){
-            if($value === NULL) continue;
+            if($value === null) continue;
             if(!in_array($value, self::$types, true)){
                 $cdb = "CHOQ_DB_Object";
                 if(class_exists($value) && (is_subclass_of($value, $cdb) || $value == $cdb)){
@@ -184,7 +184,7 @@ class CHOQ_DB_TypeMember{
     }
 
     /**
-    * Set if value can be NULL or not
+    * Set if value can be null or not
     *
     * @param bool $bool
     * @return CHOQ_DB_TypeMember
@@ -213,9 +213,9 @@ class CHOQ_DB_TypeMember{
     * @param bool $bool
     * @return CHOQ_DB_TypeMember
     */
-    public function setLength($length, $decimalLength = NULL){
+    public function setLength($length, $decimalLength = null){
         if(!is_int($length)) error("setLength must be integer value");
-        if($decimalLength !== NULL && !is_int($decimalLength)) error("setLength - Decimal length must be integer value in ".(string)$this);
+        if($decimalLength !== null && !is_int($decimalLength)) error("setLength - Decimal length must be integer value in ".(string)$this);
         $this->length = $length;
         if($decimalLength) $this->length += $decimalLength;
         $this->decimalLength = $decimalLength;
@@ -379,12 +379,13 @@ class CHOQ_DB_TypeMember{
 
     /**
     * Convert the given value from the database into the correct framework format
-    * array/object types return NULL - This special type is handled seperatly by the DB connection
+    * array/object types return null - This special type is handled seperatly by the DB connection
     *
     * @param mixed $value
     * @return mixed
     */
     public function convertFromDbValue($value){
+        if($value === NULL) return NULL;
         $rType = $this->getPHPTypeForDbType($this->fieldTypeArray ? $this->fieldTypeArray : $this->fieldType);
         if($rType == "datetime") return dt($value." ".CHOQ_DateTime::$dbTimezone);
         if($rType != "array" && $rType){
@@ -399,7 +400,7 @@ class CHOQ_DB_TypeMember{
     * @param mixed $type
     * @return string
     */
-    private function getPHPTypeForDbType($type){
+    public function getPHPTypeForDbType($type){
         if(isset(self::$_cache[$type])) return self::$_cache[$type];
         foreach(self::$typesPHP as $key => $types){
             if(in_array($type, $types)){

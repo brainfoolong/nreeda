@@ -145,7 +145,7 @@ class RDR_Sidebar extends CHOQ_View{
             <?php echo $label?><br/>
             <select data-setting="<?php echo $name?>" class="black">
                 <?php foreach($values as $key => $value){?>
-                    <option value="<?php echo $key?>" <?php echo user()->setting($name) == $key ? 'selected="selected"' : NULL?>><?php echo $value?></option>
+                    <option value="<?php echo $key?>" <?php echo user()->setting($name) == $key ? 'selected="selected"' : null?>><?php echo $value?></option>
                 <?php }?>
             </select>
         </div>

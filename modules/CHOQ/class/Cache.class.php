@@ -33,9 +33,9 @@ abstract class CHOQ_Cache{
     * Add a instance
     *
     * @param string $path Anything parsable by parse_url()
-    * @param mixed $id NULL for default or a string id
+    * @param mixed $id null for default or a string id
     */
-    static function add($path, $id = NULL){
+    static function add($path, $id = null){
         if(is_null($id)) $id = "default";
         $parsedUrl = parse_url($path);
         self::$instances[$id] = $parsedUrl;
@@ -48,7 +48,7 @@ abstract class CHOQ_Cache{
     * @param mixed $id The instance id
     * @return self
     */
-    static function getInstance($id = NULL){
+    static function getInstance($id = null){
         if(is_null($id)) $id = "default";
         if($id instanceof CHOQ_Cache) $id = $id->id;
         if(!isset(self::$instances[$id])){
@@ -68,17 +68,17 @@ abstract class CHOQ_Cache{
     * Store a value in the cache
     *
     * @param string $key The cache key
-    * @param mixed $value Any value to store, if NULL remove the entry
-    * @param CHOQ_DateTime|int|NULL $expires
+    * @param mixed $value Any value to store, if null remove the entry
+    * @param CHOQ_DateTime|int|null $expires
     *   If integer than the expire time is = now + $expire
-    *   If NULL than no expire is set
+    *   If null than no expire is set
     * @return self
     */
-    abstract public function set($key, $value, $expires = NULL);
+    abstract public function set($key, $value, $expires = null);
 
     /**
     * Get value from cache
-    * NULL returned if key not found
+    * null returned if key not found
     *
     * @param string $key The cache key
     * @return mixed|false False if key not found OR value is false

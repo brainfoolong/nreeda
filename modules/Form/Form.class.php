@@ -20,8 +20,6 @@ class Form extends CHOQ_Module{
     * Fired when initialise the module
     */
     public function onInit(){
-        # add this lines to your config to enable form support
-        # html()->addFileGroupToHead("form", "css", "YOURDIR", "YOURALIAS", array(CHOQ_ROOT_DIRECTORY."/modules/Form/view/_css/form.css"));
     }
 }
 

@@ -29,9 +29,9 @@ abstract class Form_Field_Input extends Form_Field{
     * @return string
     */
     public function getHtml(){
-        $this->attributes->add("type", $this->type);
-        $this->attributes->add("value", s((string)$this->defaultValue));
-        return $this->htmlBeforeField.'<input '.$this->attributes->getHtml().'/>'.$this->htmlAfterField.$this->getJsPart();
+        $this->attr->add("type", $this->type);
+        $this->attr->add("value", s((string)$this->defaultValue));
+        return $this->htmlBeforeField.'<input '.$this->attr->getHtml().'/>'.$this->htmlAfterField.$this->getJsPart();
     }
 }
 

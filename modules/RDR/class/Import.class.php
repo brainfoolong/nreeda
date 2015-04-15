@@ -22,7 +22,7 @@ class RDR_Import{
     static function updateAllFeeds(){
         ini_set("memory_limit", "256M");
         set_time_limit(6000);
-        $feeds = RDR_Feed::getByCondition(NULL, NULL, "+lastImport");
+        $feeds = RDR_Feed::getByCondition(null, null, "+lastImport");
         foreach($feeds as $feed){
             try{
                 self::importFavicon($feed);
@@ -156,7 +156,7 @@ class RDR_Import{
             if($tmp) $title = self::xmlValue($tmp);
         }
         if(!$title){
-            $tmp = $xml->channel && $xml->channel->title ? $xml->channel->title : NULL;
+            $tmp = $xml->channel && $xml->channel->title ? $xml->channel->title : null;
              if($tmp) $title = self::xmlValue($tmp);
         }
         if(!$title){
@@ -263,7 +263,7 @@ class RDR_Import{
     static private function getSimpleXMLFromUrl($url){
         $data = RDR_FileContents::get($url);
         if($data === false) return false;
-        $xml = @simplexml_load_string($data, NULL, LIBXML_NOCDATA);
+        $xml = @simplexml_load_string($data, null, LIBXML_NOCDATA);
         if(!$xml){
             RDR_Event::log(RDR_Event::TYPE_SIMPLEXML_ERROR, array("text" => $url));
             return false;
@@ -276,7 +276,7 @@ class RDR_Import{
     *
     * @param SimpleXMLElement $item
     * @param RDR_Feed $feed
-    * @return RDR_Entry | NULL
+    * @return RDR_Entry | null
     */
     static private function createEntryForItem($item, RDR_Feed $feed){
         $guid = self::xmlValue($item->guid);
@@ -287,15 +287,15 @@ class RDR_Import{
 
         $now = dt("now");
 
-        $entry->title = NULL;
+        $entry->title = null;
         $entry->title = cut(self::xmlValue($item->title), 252, "...");
 
-        $entry->text = NULL;
+        $entry->text = null;
         $entry->text = self::xmlValue($item->description);
         if(!$entry->text) $entry->text = self::xmlValue($item->content);
         if(!$entry->text) $entry->text = self::xmlValue($item->summary);
 
-        $entry->datetime = NULL;
+        $entry->datetime = null;
         $entry->datetime = dt(self::xmlValue($item->pubDate));
         if(!$entry->datetime->valid) $entry->datetime = dt(self::xmlValue($item->published));
         if(!$entry->datetime->valid) $entry->datetime = dt(self::xmlValue($item->updated));
@@ -313,7 +313,7 @@ class RDR_Import{
         if(!$entry->link) $entry->link = self::xmlValue($item->link);
         if(!$entry->link) $entry->link = self::xmlAttr($item->link, "href");
 
-        $entry->image = NULL;
+        $entry->image = null;
         $enclosures = $item->xpath("enclosure");
         if($enclosures){
             foreach($enclosures as $encl){
@@ -348,8 +348,8 @@ class RDR_Import{
                         }
                         if(!$entry->image){
                             $attr = $value->attributes();
-                            $url = isset($attr->url) ? self::xmlValue($attr->url) : NULL;
-                            $type = isset($attr->type) ? self::xmlValue($attr->type) : NULL;
+                            $url = isset($attr->url) ? self::xmlValue($attr->url) : null;
+                            $type = isset($attr->type) ? self::xmlValue($attr->type) : null;
                             if($url && (preg_match("~\.(jpg|jpeg|png|gif)~i", $url) || preg_match("~image\/~i", $type))){
                                 $entry->image = $url;
                             }

@@ -75,7 +75,7 @@ class RDR_Setting extends CHOQ_DB_Object{
     * Create cache for all settings
     */
     static private function createCache(){
-        if(self::$_cache === NULL){
+        if(self::$_cache === null){
             self::$_cache = db()->fetchColumn("SELECT value, ".db()->quote("key")." FROM ".__CLASS__, "key");
         }
     }

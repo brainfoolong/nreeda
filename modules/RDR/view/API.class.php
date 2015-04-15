@@ -22,7 +22,7 @@ class RDR_API extends CHOQ_View{
     public function onLoad(){
         if(!needRole()) return;
 
-        $jsonData = NULL;
+        $jsonData = null;
         switch(post("action")){
             case "delete-feed-user":
                 $feed = RDR_Feed::getById(post("data[fid]"));

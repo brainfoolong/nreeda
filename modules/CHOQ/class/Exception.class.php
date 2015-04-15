@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * The CHOQ Exception
@@ -126,7 +126,7 @@ class CHOQ_Exception extends Exception{
     * @param int $code
     * @return CHOQ_Exception
     */
-    public function __construct($message = NULL, $code = 500){
+    public function __construct($message = null, $code = 500){
         parent::__construct($message, $code);
     }
 

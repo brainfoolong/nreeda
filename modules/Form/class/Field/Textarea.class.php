@@ -24,7 +24,7 @@ class Form_Field_Textarea extends Form_Field{
     * @return self
     */
     public function setRowsAndCols($rows, $cols){
-        $this->attributes->add("rows", $row)->add("cols", $cols);
+        $this->attr->add("rows", $row)->add("cols", $cols);
         return $this;
     }
 
@@ -34,7 +34,7 @@ class Form_Field_Textarea extends Form_Field{
     * @return string
     */
     public function getHtml(){
-        return $this->htmlBeforeField.'<textarea '.$this->attributes->getHtml().'>'.s((string)$this->defaultValue).'</textarea>'.$this->htmlAfterField.$this->getJsPart();
+        return $this->htmlBeforeField.'<textarea '.$this->attr->getHtml().'>'.s((string)$this->defaultValue).'</textarea>'.$this->htmlAfterField.$this->getJsPart();
     }
 }
 

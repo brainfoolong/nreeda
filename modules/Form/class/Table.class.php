@@ -59,7 +59,7 @@ class Form_Table{
     public function addSubmit($value, $name = "", $attr = array()){
         $field = new Form_Field_Submit($name);
         $field->setDefaultValue($value);
-        foreach($attr as $key => $value) $field->attributes->add($key, $value);
+        foreach($attr as $key => $value) $field->attr->add($key, $value);
         $this->buttons[] = $field;
         return $field;
     }
@@ -74,7 +74,7 @@ class Form_Table{
     public function addButton($value, $attr = array()){
         $field = new Form_Field_Button("");
         $field->setDefaultValue($value);
-        foreach($attr as $key => $value) $field->attributes->add($key, $value);
+        foreach($attr as $key => $value) $field->attr->add($key, $value);
         $this->buttons[] = $field;
         return $field;
     }
@@ -101,7 +101,7 @@ class Form_Table{
             for($i = 1 ; $i <= $fieldsPerBlock; $i++){
                 for($b = 1; $b <= $fieldsPerRow; $b++){
                     $field = array_shift($fields);
-                    if($field === NULL) break 2;
+                    if($field === null) break 2;
                     $fieldsBlock[$b][$field->name] = $field;
                 }
             }
@@ -109,14 +109,15 @@ class Form_Table{
             for($b = 1; $b <= $fieldsPerRow; $b++){
                 for($i = 1 ; $i <= $fieldsPerBlock; $i++){
                     $field = array_shift($fields);
-                    if($field === NULL) break 2;
+                    if($field === null) break 2;
                     $fieldsBlock[$b][$field->name] = $field;
                 }
             }
         }
 
         $output = '<div id="'.$this->id.'" class="formtable">';
-        $output .= '<form '.$this->form->attributes->getHtml().'>';
+        $output .= '<form '.$this->form->attr->getHtml().'>';
+        $output .= '<input type="hidden" name="form-'.$this->form->attr->get("name").'" value="1"/>';
         foreach($fieldsHidden as $field){
             $output .= $field->getHtml();
         }
@@ -127,8 +128,8 @@ class Form_Table{
                 if($fields){
                     $output .= '<table class="formtable-table">';
                     foreach($fields as $field){
-                        $output .= '<tr class="formtable-fieldtype-'.strtolower(slugify(get_class($field))).'">';
-                        $output .= '<td class="formtable-label"><label for="'.$field->attributes->get("id").'">'.$field->label.'</label></td>';
+                        $output .= '<tr class="formtable-fieldtype-'.strtolower(slugify(get_class($field))).' formtable-field-name-'.slugify($field->name).'">';
+                        $output .= '<td class="formtable-label"><label for="'.$field->attr->get("id").'">'.$field->label.'</label></td>';
                         $output .= '<td class="formtable-field">'.$field->getHtml().'</td>';
                         $output .= '</tr>';
                     }
@@ -139,9 +140,11 @@ class Form_Table{
         }
         if($this->buttons){
             $output .= '<div class="formtable-buttons">';
+            if($fieldsBlock) $output .= '<table class="formtable-table"><tr><td class="formtable-label"></td><td class="formtable-field">';
             foreach($this->buttons as $field){
                 $output .= $field->getHtml();
             }
+            if($fieldsBlock) $output .= '</td></tr></table>';
             $output .= '</div>';
         }
         $output .= '</form></div>';

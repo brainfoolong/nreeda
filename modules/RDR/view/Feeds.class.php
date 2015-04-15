@@ -41,7 +41,7 @@ class RDR_Feeds extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
-        needRole(NULL, true);
+        needRole(null, true);
 
         $p = $this->getParam("param");
         $explodeParam = explode("-", $p);
@@ -156,7 +156,7 @@ class RDR_Feeds extends CHOQ_View{
 
                         user()->updateInitEntry($id);
                         user()->updateNewsCache();
-                        user()->readed = NULL;
+                        user()->readed = null;
                         user()->store();
                     }
                 }
@@ -166,6 +166,7 @@ class RDR_Feeds extends CHOQ_View{
 
             $max = RDR_Entry::ENTRIES_PER_PAGE;
             $ids = session("entry.ids");
+            if(!$ids) $ids = array();
             $entryIds = array_slice($ids, 0, $max);
             session("entry.ids", array_slice($ids, $max));
 
@@ -254,7 +255,7 @@ class RDR_Feeds extends CHOQ_View{
 
         $imageTag = '<div class="image"></div>';
         ?>
-        <div class="<?php echo user()->setting("hideimages") ? 'no-feed-images' : NULL?> entry <?php echo $readed && $this->readedLayoutEnabled ? 'readed' : NULL?> layout-<?php echo s($layout)?>" id="entry-<?php echo $entry->getId()?>" data-id="<?php echo $entry->getId()?>" data-feed="<?php echo $feed->getId()?>">
+        <div class="<?php echo user()->setting("hideimages") ? 'no-feed-images' : null?> entry <?php echo $readed && $this->readedLayoutEnabled ? 'readed' : null?> layout-<?php echo s($layout)?>" id="entry-<?php echo $entry->getId()?>" data-id="<?php echo $entry->getId()?>" data-feed="<?php echo $feed->getId()?>">
             <div class="feed-start"></div>
             <?php
             switch($layout){

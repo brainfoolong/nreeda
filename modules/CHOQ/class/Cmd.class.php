@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
  * Execute commands on the OS command line
@@ -70,10 +70,10 @@ class CHOQ_Cmd{
     * Create a instance and return it
     *
     * @param string $alias The alias for the program
-    * @param array|NULL $parameters A array of parameters to add to the argument list
+    * @param array|null $parameters A array of parameters to add to the argument list
     * @return self
     */
-    static function create($alias, $parameters = NULL){
+    static function create($alias, $parameters = null){
         if(!isset(self::$progs[$alias])) error("Cmd Alias '$alias' not available");
         $obj = new self;
         $obj->params[] = escapeshellcmd(self::$progs[$alias]);

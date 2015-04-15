@@ -33,13 +33,13 @@ class Form_Attributes{
     /**
     * Constructor
     *
-    * @param mixed $attributes
+    * @param mixed $attr
     * @return Form_Attributes
     */
-    public function __construct($attributes = NULL){
-        $this->add("id", "field-".md5(uniqid(NULL, true)));
-        if(is_array($attributes)){
-            foreach($attributes as $key => $value) $this->add($key, $value);
+    public function __construct($attr = null){
+        $this->add("id", "field-".md5(uniqid(null, true)));
+        if(is_array($attr)){
+            foreach($attr as $key => $value) $this->add($key, $value);
         }
     }
 
@@ -72,9 +72,9 @@ class Form_Attributes{
     * @param mixed $value
     * @return self
     */
-    public function add($key, $value){
+    public function add($key, $value = null){
         $key = (string)$key;
-        $this->arr[$key] = $this->normalizeValue($value);
+        $this->arr[$key] = $value === null ? null : $this->normalizeValue($value);
         return $this;
     }
 
@@ -86,16 +86,19 @@ class Form_Attributes{
     public function addClass($class){
         $class = (string)$class;
         $this->class[$class] = $class;
+        return $this;
     }
 
     /**
     * Remove a attribute if it exist
     *
     * @param string $key
+    * @return self
     */
     public function remove($key){
         $key = (string)$key;
         if(isset($this->arr[$key])) unset($this->arr[$key]);
+        return $this;
     }
 
     /**
@@ -106,6 +109,7 @@ class Form_Attributes{
     public function removeClass($class){
         $class = (string)$class;
         if(isset($this->class[$class])) unset($this->class[$class]);
+        return $this;
     }
 
     /**
@@ -153,14 +157,20 @@ class Form_Attributes{
     *   Example: array("key1" => "value1", "key2" => "value2")
     * @return string
     */
-    public function getHtml($ignoreAttributes = NULL, $overrideAttributes = NULL){
+    public function getHtml($ignoreAttributes = null, $overrideAttributes = null){
         $attr = $this->arr;
         $attr["class"] = implode(" ", $this->class);
         if(!$attr["class"]) unset($attr["class"]);
         if(is_array($ignoreAttributes)) foreach($ignoreAttributes as $key) if(isset($attr[$key])) unset($attr[$key]);
         if(is_array($overrideAttributes)) foreach($overrideAttributes as $key => $value) $attr[(string)$key] = $this->normalizeValue($value);
         ksort($attr);
-        foreach($attr as $key => $value) $attr[$key] = $key.'="'.$value.'"';
+        foreach($attr as $key => $value) {
+            if($value === null) {
+                $attr[$key] = $key;
+                continue;
+            }
+            $attr[$key] = $key.'="'.$value.'"';
+        }
         return implode(" ", $attr);
     }
 }

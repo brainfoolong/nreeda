@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * URL Manager
@@ -61,7 +61,7 @@ class CHOQ_UrlManager{
     */
     public function setUriPrefix($prefix){
         if(!$prefix){
-            $this->uriPrefix = NULL;
+            $this->uriPrefix = null;
         }else{
             $this->uriPrefix = trim($prefix, " /");
         }
@@ -91,9 +91,9 @@ class CHOQ_UrlManager{
     *
     * @param mixed $alias
     * @param string $append Append URI to output
-    * @return string|NULL
+    * @return string|null
     */
-    public function getByAlias($alias, $append = NULL){
+    public function getByAlias($alias, $append = null){
         $url = arrayValue($this->aliases, $alias);
         if($append) $url = rtrim($url, " /")."/".ltrim($append, " /");
         return $url;
@@ -128,7 +128,7 @@ class CHOQ_UrlManager{
     * Get current uri with modifications
     *
     * @param mixed $params
-    *   If is NULL than no changed will be made for the $_GET params
+    *   If is null than no changed will be made for the $_GET params
     *   If is FALSE than all $_GET parameters will be removed,
     *   If is a array than all key/value pairs will be replaced, if array value is FALSE than this single parameter will be removed
     * @param mixed $includePrefix If false than remove the $this->uriPrefix from the uri
@@ -139,7 +139,7 @@ class CHOQ_UrlManager{
     * @param bool $secure If true than cleaned up from some unsecure html characters
     * @return string
     */
-    public function getModifiedUri($params = NULL, $includePrefix = true, $includeLanguage = true, $secure = true){
+    public function getModifiedUri($params = null, $includePrefix = true, $includeLanguage = true, $secure = true){
         $uri = $this->getUri($secure);
         if(!$includePrefix && $this->uriPrefix) $uri = preg_replace("~^/".$this->uriPrefix."/~", "/", $uri, 1);
         if($includeLanguage === false || is_string($includeLanguage)){

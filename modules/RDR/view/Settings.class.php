@@ -20,7 +20,7 @@ class RDR_Settings extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
-        needRole(NULL, true);
+        needRole(null, true);
 
         if(post("savepw")){
             if(post("newpw") && post("newpw") == post("newpw2")){

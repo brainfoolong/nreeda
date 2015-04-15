@@ -9,7 +9,8 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
+if(!defined("CHOQ")) die();
 $translations = array(
     'datetime.day.1' => 'Monday',
     'datetime.day.2' => 'Tuesday',
@@ -30,23 +31,23 @@ $translations = array(
     'datetime.month.7' => 'July',
     'datetime.month.8' => 'August',
     'datetime.month.9' => 'September',
-    'datetime.shortDay.1' => 'Mon',
-    'datetime.shortDay.2' => 'Tue',
-    'datetime.shortDay.3' => 'Wed',
-    'datetime.shortDay.4' => 'Thu',
-    'datetime.shortDay.5' => 'Fri',
-    'datetime.shortDay.6' => 'Sat',
-    'datetime.shortDay.7' => 'Sun',
-    'datetime.shortMonth.1' => 'Jan',
-    'datetime.shortMonth.10' => 'Oct',
-    'datetime.shortMonth.11' => 'Nov',
-    'datetime.shortMonth.12' => 'Dec',
-    'datetime.shortMonth.2' => 'Feb',
-    'datetime.shortMonth.3' => 'Mar',
-    'datetime.shortMonth.4' => 'April',
-    'datetime.shortMonth.5' => 'May',
-    'datetime.shortMonth.6' => 'June',
-    'datetime.shortMonth.7' => 'July',
-    'datetime.shortMonth.8' => 'Aug',
-    'datetime.shortMonth.9' => 'Sept',
+    'datetime.dayshort.1' => 'Mon',
+    'datetime.dayshort.2' => 'Tue',
+    'datetime.dayshort.3' => 'Wed',
+    'datetime.dayshort.4' => 'Thu',
+    'datetime.dayshort.5' => 'Fri',
+    'datetime.dayshort.6' => 'Sat',
+    'datetime.dayshort.7' => 'Sun',
+    'datetime.monthshort.1' => 'Jan',
+    'datetime.monthshort.10' => 'Oct',
+    'datetime.monthshort.11' => 'Nov',
+    'datetime.monthshort.12' => 'Dec',
+    'datetime.monthshort.2' => 'Feb',
+    'datetime.monthshort.3' => 'Mar',
+    'datetime.monthshort.4' => 'April',
+    'datetime.monthshort.5' => 'May',
+    'datetime.monthshort.6' => 'June',
+    'datetime.monthshort.7' => 'July',
+    'datetime.monthshort.8' => 'Aug',
+    'datetime.monthshort.9' => 'Sept',
 );

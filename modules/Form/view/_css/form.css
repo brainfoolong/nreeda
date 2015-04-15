@@ -39,6 +39,12 @@ td.formtable-field{
     text-align: center;
 }
 
+
+.formtable-buttons table{
+    text-align: left;
+}
+
 .formtable-validation{
     color:red;
+    display: none;
 }

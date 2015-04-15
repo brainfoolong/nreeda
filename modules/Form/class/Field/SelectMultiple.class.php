@@ -23,7 +23,7 @@ class Form_Field_SelectMultiple extends Form_Field_Select{
     * @return self
     */
     public function setSize($size){
-        return $this->attributes->add("size", $size);
+        return $this->attr->add("size", $size);
     }
 
     /**
@@ -32,7 +32,7 @@ class Form_Field_SelectMultiple extends Form_Field_Select{
     * @return string
     */
     public function getHtml(){
-        $this->attributes->add("multiple", "multiple");
+        $this->attr->add("multiple", "multiple");
         return parent::getHtml();
     }
 }

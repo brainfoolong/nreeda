@@ -63,7 +63,7 @@ class RDR_Admin_System extends CHOQ_View{
             <div class="btn update-all"><?php echo t("admin.update.5")?></div>
             <div class="spacer"></div>
             <?php
-            $feeds = RDR_Feed::getByCondition(NULL, NULL, "+name");
+            $feeds = RDR_Feed::getByCondition(null, null, "+name");
             foreach($feeds as $feed){?>
                 <div style="padding-left: 20px; margin-bottom: 2px;" class="feed">
                     <div class="inline-btn update-feed" data-id="<?php echo $feed->getId()?>"><?php echo t("admin.update.6")?></div>

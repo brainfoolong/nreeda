@@ -66,7 +66,7 @@ class RDR_Admin_User extends CHOQ_View{
     */
     public function getContent(){
         headline(t("admin.user.1"));
-        $users = RDR_User::getByCondition(NULL, NULL, "+username");
+        $users = RDR_User::getByCondition(null, null, "+username");
         foreach($users as $user){
             ?>
             <a href="<?php echo url()->getModifiedUri(array("id" => $user->getId()))?>"><?php echo s($user->username)?> (<?php echo t("user.".$user->role)?>)</a><br/>
@@ -99,27 +99,23 @@ class RDR_Admin_User extends CHOQ_View{
 
         $field = new Form_Field_Text("username", t("username"));
         $field->setDefaultValue($this->user->username);
-        $field->setTypeMember("RDR_User::username");
-        $field->addLengthValidatorByMember(t("form.validator.maxlength"));
-        $field->addRequiredValidatorByMember(t("form.validator.required"));
+        $field->setDbObjectMember($this->user);
         $form->addField($field);
 
         $field = new Form_Field_Password("password", t("password"));
         if(!$this->user->getId()){
-            $field->setTypeMember("RDR_User::password");
-            $field->addRequiredValidatorByMember(t("form.validator.required"));
+            $field->setDbObjectMember($this->user);
         }
         $form->addField($field);
 
         $field = new Form_Field_Password("password2", t("settings.3"));
         if(!$this->user->getId()){
-            $field->setTypeMember("RDR_User::password");
-            $field->addRequiredValidatorByMember(t("form.validator.required"));
+            $field->setDbObjectMember($this->user, "password");
         }
         $form->addField($field);
 
         $field = new Form_Field_Select("role", t("admin.user.5"));
-        $field->setTypeMember("RDR_User::role");
+        $field->setDbObjectMember($this->user);
         $field->addOption(RDR_User::ROLE_USER, t("user.".RDR_User::ROLE_USER));
         $field->addOption(RDR_User::ROLE_ADMIN, t("user.".RDR_User::ROLE_ADMIN));
         $field->setDefaultValue($this->user->role);

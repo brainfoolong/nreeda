@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * The base class for a storable database object
@@ -130,7 +130,7 @@ abstract class CHOQ_DB_Object{
     *
     * @param CHOQ_DB $db
     * @param CHOQ_DB_Type $type
-    * @return CHOQ_DB_Object[] | NULL
+    * @return CHOQ_DB_Object[] | null
     */
     static function getCachedObjects(CHOQ_DB $db, CHOQ_DB_Type $type){
         $dbId = $db->id;
@@ -142,7 +142,7 @@ abstract class CHOQ_DB_Object{
     *
     * @param CHOQ_DB $db
     * @param mixed $id
-    * @return CHOQ_DB_Object | NULL
+    * @return CHOQ_DB_Object | null
     */
     static function getCachedObjectById(CHOQ_DB $db, $id){
         $dbId = $db->id;
@@ -154,21 +154,21 @@ abstract class CHOQ_DB_Object{
     *
     * @param int $id
     * @param mixed $db The db connection to use
-    * @return static | NULL
+    * @return static | null
     */
-    static public function getById($id, $db = NULL){
+    static function getById($id, $db = null){
         return db($db)->getById(get_called_class(), $id);
     }
 
     /**
-    * Get objects by ids - Uses the default db connection
+    * Get objects by ids
     *
-    * @param array $id
+    * @param array $ids
     * @param bool $resort If true than the resulted array is in the same sort as the given ids
     * @param mixed $db The db connection to use
     * @return static[]
     */
-    static public function getByIds(array $ids, $resort = false, $db = NULL){
+    static function getByIds(array $ids, $resort = false, $db = null){
         return db($db)->getByIds(get_called_class(), $ids, $resort);
     }
 
@@ -176,7 +176,7 @@ abstract class CHOQ_DB_Object{
     * Get objects by condition
     * Search without any parameter will return all objects
     *
-    * @param string|NULL $condition If NULL than no condition is added (getAll)
+    * @param string|null $condition If null than no condition is added (getAll)
     *   To add a parameters placeholder add brackets with the parameters key - Example: {mykey}
     *   To quote fieldNames correctly enclose a fieldName with <fieldName>
     * @param mixed $parameters Can be a array of parameters, a single parameter or NULL
@@ -184,12 +184,12 @@ abstract class CHOQ_DB_Object{
     *   Sort value must be a fieldName with a +/- prefix - Example: -id
     *   + means sort ASC
     *   - means sort DESC
-    * @param int|NULL $limit Define a limit for the query
-    * @param int|NULL $offset Define a offset for the query
+    * @param int|null $limit Define a limit for the query
+    * @param int|null $offset Define a offset for the query
     * @param mixed $db The db connection to use
     * @return static[]
     */
-    static function getByCondition($condition = NULL, $parameters = NULL, $sort = NULL, $limit = NULL, $offset = NULL, $db = NULL){
+    static function getByCondition($condition = null, $parameters = null, $sort = null, $limit = null, $offset = null, $db = null){
         return db($db)->getByCondition(get_called_class(), $condition, $parameters, $sort, $limit, $offset);
     }
 
@@ -202,7 +202,7 @@ abstract class CHOQ_DB_Object{
     * @param mixed $db The db connection to use
     * @return static[]
     */
-    static public function getByQuery($query, $db = NULL){
+    static function getByQuery($query, $db = null){
         return db($db)->getByQuery(get_called_class(), $query);
     }
 
@@ -277,16 +277,16 @@ abstract class CHOQ_DB_Object{
         if($member) {
             $this->_loaded[$name] = true;
             $this->_changes[$name] = true;
-            if($value !== NULL){
+            if($value !== null){
                 $member->checkValue($value, true);
                 if($member->fieldType == "array"){
-                    $this->_realValues[$name] = NULL;
+                    $this->_realValues[$name] = null;
                     foreach($value as $k => $v) $this->add($name, $v, $k);
                 }else{
                     $this->_realValues[$name] = $value;
                 }
             }else{
-                $this->_realValues[$name] = NULL;
+                $this->_realValues[$name] = null;
             }
         }else{
             $this->{$name} = $value;
@@ -305,7 +305,7 @@ abstract class CHOQ_DB_Object{
     /**
     * Get the CHOQ_DB_TypeMember for the property
     *
-    * @return CHOQ_DB_TypeMember|NULL
+    * @return CHOQ_DB_TypeMember|null
     */
     public function _getMember($property){
         $members = $this->_getMembers();
@@ -337,7 +337,7 @@ abstract class CHOQ_DB_Object{
     * @return self
     */
     public function _clear(){
-        foreach($this as $key => $val) $this->{$key} = NULL;
+        foreach($this as $key => $val) $this->{$key} = null;
     }
 
     /**
@@ -355,17 +355,17 @@ abstract class CHOQ_DB_Object{
     * Keys for referenced objects are always the ID of the object, for all other the keys are that what you've set previously
     *
     * @param string $property
-    * @param string|NULL $key If null than all keys will be returned
-    * @return mixed|NULL Null if key not exist
+    * @param string|null $key If null than all keys will be returned
+    * @return mixed|null Null if key not exist
     */
-    public function getByKey($property, $key = NULL){
+    public function getByKey($property, $key = null){
         $member = $this->_getMember($property);
         if($member->fieldType != "array") error("Cannot getByKey for '{$member}', is not a array member");
         if($this->getId() && !isset($this->_loaded[$property])){
             $this->_db->lazyLoadArrayMember($this, $member);
         }
-        if($key === NULL && isset($this->_realValues[$property])) return $this->_realValues[$property];
-        if($key !== NULL && isset($this->_realValues[$property][$key])) return $this->_realValues[$property][$key];
+        if($key === null && isset($this->_realValues[$property])) return $this->_realValues[$property];
+        if($key !== null && isset($this->_realValues[$property][$key])) return $this->_realValues[$property][$key];
     }
 
     /**
@@ -373,11 +373,11 @@ abstract class CHOQ_DB_Object{
     *
     * @param string $property
     * @param mixed $value
-    * @param string|int|CHOQ_DB_Object|NULL $key
+    * @param string|int|CHOQ_DB_Object|null $key
     * @param bool $integrityChecks If false than the values will be setted without any validation (for lazy loading)
     * @return self
     */
-    public function add($property, $value, $key = NULL, $integrityChecks = true){
+    public function add($property, $value, $key = null, $integrityChecks = true){
         if(!$integrityChecks){
             $this->_realValues[$property][$key] = $value;
             return;
@@ -389,7 +389,7 @@ abstract class CHOQ_DB_Object{
 
         $member->checkArrayValue($value, $key, true);
 
-        if($key === NULL){
+        if($key === null){
             if(!isset($this->_realValues[$property])) $this->_realValues[$property] = array();
             $this->_realValues[$property][] = $value;
             end($arr);
@@ -425,9 +425,9 @@ abstract class CHOQ_DB_Object{
             $key = $id;
         }
         $existValue = $this->getByKey($property, $key);
-        if($existValue !== NULL){
+        if($existValue !== null){
             unset($this->_realValues[$property][$key]);
-            if(!$this->_realValues[$property]) $this->_realValues[$property] = NULL;
+            if(!$this->_realValues[$property]) $this->_realValues[$property] = null;
             $this->_changes[$property] = true;
         }
         return $this;

@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * DB Type Handling
@@ -47,10 +47,11 @@ class CHOQ_DB_Type{
     /**
     * Get a instance for a class
     *
-    * @param string $class
+    * @param string|CHOQ_DB_Object $class
     * @return CHOQ_DB_Type
     */
     static function get($class){
+        if(is_object($class)) $class = get_class($class);
         if(!isset(self::$instances[$class])) return new self($class);
         return self::$instances[$class];
     }
@@ -82,6 +83,7 @@ class CHOQ_DB_Type{
     * @return CHOQ_DB_TypeMember
     */
     public function getMember($name){
+        if(!isset($this->members[$name])) error("Type Member '$name' does not exist in ".(string)$this);
         return $this->members[$name];
     }
 

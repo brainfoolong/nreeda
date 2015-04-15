@@ -9,10 +9,10 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
-* HTML Manager
+* HTML Manager for general page header and footer stuff
 */
 class CHOQ_HtmlManager{
 
@@ -100,7 +100,7 @@ class CHOQ_HtmlManager{
             $groupContent = "";
             $filename = $group.".".$data[1];
             $filePath = $data[0].DS.$filename;
-            $newestTimestamp = NULL;
+            $newestTimestamp = null;
             foreach($data[3] as $file){
                 if(!file_exists($file)) error("File '$file' doesn't exist");
                 $newestTimestamp = max(array($newestTimestamp, filemtime($file)));

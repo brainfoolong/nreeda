@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * Date Time class
@@ -36,7 +36,7 @@ class CHOQ_DateTime{
     *
     * @var mixed
     */
-    static $invalidReturn = NULL;
+    static $invalidReturn = null;
 
     /**
     * Flag if date is valid or not
@@ -93,10 +93,10 @@ class CHOQ_DateTime{
     * @param string $format
     * @param NULL|string $timezone Override the default self::$timezone
     * @param NULL|string $invalidReturn Override the default self::$invalidReturn
-    * @return string|NULL
+    * @return string|null
     */
-    public function format($format, $timezone = NULL, $invalidReturn = NULL){
-        $invalidReturn = $invalidReturn === NULL ? self::$invalidReturn : $invalidReturn;
+    public function format($format, $timezone = null, $invalidReturn = null){
+        $invalidReturn = $invalidReturn === null ? self::$invalidReturn : $invalidReturn;
         if(!$this->valid) return $invalidReturn;
         $this->overrideTZ($timezone);
         $date = date($format, $this->unixtime);
@@ -107,7 +107,7 @@ class CHOQ_DateTime{
     /**
      * Get SQL Date Time format in db timezone
      *
-     * @return string|NULL
+     * @return string|null
      */
     public function getSQLDateTime(){
         return $this->format("Y-m-d H:i:s", self::$dbTimezone);
@@ -116,7 +116,7 @@ class CHOQ_DateTime{
     /**
      * Get SQL Date format in db timezone
      *
-     * @return string|NULL
+     * @return string|null
      */
     public function getSQLDate(){
         return $this->format("Y-m-d", self::$dbTimezone);
@@ -125,10 +125,19 @@ class CHOQ_DateTime{
     /**
      * Get SQL Time format in db timezone
      *
-     * @return string|NULL
+     * @return string|null
      */
     public function getSQLTime(){
         return $this->format("H:i:s", self::$dbTimezone);
+    }
+
+    /**
+    * Get datetime in a required htmldatetime format
+    *
+    * @return string
+    */
+    public function getHtmlDateTime(){
+        return $this->format("Y-m-d\TH:i:s");
     }
 
     /**
@@ -200,7 +209,7 @@ class CHOQ_DateTime{
     * @param mixed $short Get short dayname if set to true
     * @param mixed $language Override current active language
     */
-    public function getDayName($short = false, $language = NULL){
+    public function getDayName($short = false, $language = null){
         return t("datetime.day".($short ? 'short' : '').".".$this->getDay(), $language);
     }
 
@@ -210,7 +219,7 @@ class CHOQ_DateTime{
     * @param mixed $short Get short dayname if set to true
     * @param mixed $language Override current active language
     */
-    public function getMonthName($short = false, $language = NULL){
+    public function getMonthName($short = false, $language = null){
         return t("datetime.month".($short ? 'short' : '').".".$this->getMonth(), $language);
     }
 
@@ -251,7 +260,7 @@ class CHOQ_DateTime{
     * @param mixed $timezone
     */
     private function overrideTZ($timezone){
-        $timezone = $timezone === NULL ? self::$timezone : $timezone;
+        $timezone = $timezone === null ? self::$timezone : $timezone;
         $this->tmpTZ = date_default_timezone_get();
         date_default_timezone_set($timezone);
     }

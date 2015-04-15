@@ -35,7 +35,7 @@ abstract class Form_Field{
     *
     * @var Form_Attributes
     */
-    public $attributes;
+    public $attr;
 
     /**
     * The default value for this field
@@ -59,18 +59,18 @@ abstract class Form_Field{
     public $htmlAfterField;
 
     /**
+    * The database object assigned to this field
+    *
+    * @var CHOQ_DB_Object
+    */
+    public $dbObject;
+
+    /**
     * The db member this field belongs to
     *
     * @var CHOQ_DB_TypeMember
     */
-    public $member;
-
-    /**
-    * The db connection this fields type member belongs to
-    *
-    * @var CHOQ_DB_DB
-    */
-    public $db;
+    public $dbTypeMember;
 
     /**
     * Array of validators
@@ -95,7 +95,7 @@ abstract class Form_Field{
         $validators = array();
         foreach($this->validators as $validator) $validators[] = $validator->toJsonData();
         $output = '<script type="text/javascript">';
-        $output .= '(function(){var field = $("#'.$this->attributes->get("id").'"); if(!field.data("formtablefield")) new FormTableField(field, '.json_encode($validators).')})();';
+        $output .= '(function(){var field = $("#'.$this->attr->get("id").'"); if(!field.data("formtablefield")) new FormTableField(field, '.json_encode($validators).')})();';
         $output .= '</script>';
         return $output;
     }
@@ -117,7 +117,7 @@ abstract class Form_Field{
     public function __construct($name, $label = ""){
         $this->label = $label;
         $this->name = $name;
-        $this->attributes = new Form_Attributes(array("name" => $name));
+        $this->attr = new Form_Attributes(array("name" => $name, "data-field-type" => strtolower(slugify(get_class($this)))));
     }
 
     /**
@@ -125,11 +125,11 @@ abstract class Form_Field{
     * Means $_GET or $_POST
     *
     * @param bool $convert If true than also convert the submitted value by the given converter
-    * @return mixed | NULL
+    * @return mixed | null
     */
     public function getSubmittedValue($convert = false){
         $value = req()->isPost() ? post($this->name) : get($this->name);
-        if($value === NULL) return $value;
+        if($value === null) return $value;
         if($convert && $this->converter) return $this->converter->convert($value);
         return $value;
     }
@@ -157,6 +157,28 @@ abstract class Form_Field{
     }
 
     /**
+    * Quick alias for addValidator(Form_Validator_Required)
+    *
+    * @return self
+    */
+    public function addValidatorRequired(){
+        return $this->addValidator(new Form_Validator_Required());
+    }
+
+    /**
+    * Quick alias for addValidator(Form_Validator_Length)
+    *
+    * @param mixed $min
+    * @param mixed $max
+    * @return self
+    */
+    public function addValidatorLength($min = null, $max = null){
+        $validator = new Form_Validator_Length();
+        $validator->setLength($min, $max);
+        return $this->addValidator($validator);
+    }
+
+    /**
     * Validate the submitted value with all validators
     *
     * @return bool
@@ -170,63 +192,35 @@ abstract class Form_Field{
     }
 
     /**
-    * Assign the type member that this field belongs to and also add the required converter
+    * Set a database object member to this field
+    * This will set automatically all required validators and converters depending on type properties
+    * Also automatically set the default value
     *
-    * @param mixed $member Could be a string "myclass::mymember" or a CHOQ_DB_TypeMember instance
-    * @param CHOQ_DB $db The db connection if required for this member
+    * @param CHOQ_DB_Object $object
+    * @param mixed $memberName If this is null than the name of the field will be used
     * @return self
     */
-    public function setTypeMember($member, $db = NULL){
-        if(is_string($member)){
-            $member = str_replace("::", ":", $member);
-            $exp = explode(":", $member);
-            $member = CHOQ_DB_Type::get($exp[0])->getMember($exp[1]);
-        }
-        $this->member = $member;
-        $this->db = $db;
-        $this->setConverterByMember();
-        return $this;
-    }
-
-    /**
-    * Set converter by fields type member properties
-    *
-    * @return Form_Converter
-    */
-    public function setConverterByMember(){
-        $this->converter = new Form_Converter();
-        $this->converter->setMember($this->member);
-        if($this->db) $this->converter->setDb($this->db);
-        return $this->converter;
-    }
-
-    /**
-    * Add required validator by fields type member properties
-    *
-    * @return Form_Validator_Required | NULL
-    */
-    public function addRequiredValidatorByMember($errorMessage){
-        if(!$this->member->optional){
+    public function setDbObjectMember(CHOQ_DB_Object $object, $memberName = null){
+        if(!$memberName) $memberName = $this->name;
+        $this->dbObject = $object;
+        $this->dbTypeMember = CHOQ_DB_Type::get($this->dbObject)->getMember($memberName);
+        # set converter
+        $this->converter = new Form_Converter($this);
+        # set required validator
+        if(!$this->dbTypeMember->optional){
             $validator = new Form_Validator_Required();
-            $validator->setErrorMessage($errorMessage);
             $this->addValidator($validator);
-            return $validator;
         }
-    }
-
-    /**
-    * Add length validator by fields type member properties
-    *
-    * @return Form_Validator_Length | NULL
-    */
-    public function addLengthValidatorByMember($errorMessage){
-        if($this->member->length){
+        # set length validator
+        if($this->dbTypeMember->length){
             $validator = new Form_Validator_Length();
-            $validator->setErrorMessage(sprintf(t("form.validator.maxlength"), (string)$this->member->length));
-            $validator->setLength(NULL, $this->member->length);
+            $validator->setErrorMessage(sprintf(t("form.validation.length"), (string)$this->dbTypeMember->length));
+            $validator->setLength(null, $this->dbTypeMember->length);
             $this->addValidator($validator);
-            return $validator;
         }
+        # set default value
+        $this->setDefaultValue($object->{$memberName});
+        return $this;
     }
 }
 

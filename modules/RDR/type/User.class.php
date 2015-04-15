@@ -80,7 +80,7 @@ class RDR_User extends CHOQ_DB_Object{
     * @param mixed $username
     * @param mixed $password
     * @param bool $remember
-    * @return self | NULL
+    * @return self | null
     */
     static function login($username, $password, $remember = false){
         $user = RDR_User::getByCondition("username = {0}", array($username));
@@ -115,7 +115,7 @@ class RDR_User extends CHOQ_DB_Object{
     */
     public function loadReadedFlags($ids){
         if(!$ids){
-            $this->_cacheReaded = NULL;
+            $this->_cacheReaded = null;
             return;
         }
         $this->_cacheReaded = db()->fetchColumn("SELECT v, k FROM RDR_User_readed WHERE o = ".user()->getId()." && k IN ".db()->toDb($ids), "k");
@@ -200,7 +200,7 @@ class RDR_User extends CHOQ_DB_Object{
     * @return RDR_Category[]
     */
     public function getCategories(){
-        if(self::$_cache === NULL){
+        if(self::$_cache === null){
             self::$_cache = RDR_Category::getByCondition(db()->quote("user")." = {0}", array($this), "+name");
         }
         return self::$_cache;
@@ -235,7 +235,7 @@ class RDR_User extends CHOQ_DB_Object{
     * Get the users category to the feed
     *
     * @param RDR_Feed $feed
-    * @return RDR_Category | NULL
+    * @return RDR_Category | null
     */
     public function getCategoryToFeed(RDR_Feed $feed){
         $categories = $this->getCategories();
@@ -256,8 +256,8 @@ class RDR_User extends CHOQ_DB_Object{
     * @param mixed $value
     * @return mixed
     */
-    public function setting($key, $value = NULL){
-        if($value === NULL){
+    public function setting($key, $value = null){
+        if($value === null){
             return $this->getByKey("settings", $key);
         }else{
             $this->add("settings", $value, $key);
@@ -290,7 +290,7 @@ class RDR_User extends CHOQ_DB_Object{
     */
     public function updateReadedCount(){
         $count = db()->fetchOne("SELECT COUNT(id) FROM RDR_User_readed WHERE o = ".$this->getId());
-        db()->query("UPDATE RDR_User SET readed = ".db()->toDb($count ? $count : NULL).", updateTime = ".db()->toDb(dt("now")->getSQLDateTime())." WHERE id = ".$this->getId());
+        db()->query("UPDATE RDR_User SET readed = ".db()->toDb($count ? $count : null).", updateTime = ".db()->toDb(dt("now")->getSQLDateTime())." WHERE id = ".$this->getId());
     }
 
     /**

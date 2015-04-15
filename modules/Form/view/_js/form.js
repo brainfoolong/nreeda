@@ -63,7 +63,20 @@ function FormTableField(field, validators){
         this.validationBox = this.field.next();
     }
     this.validate = function(){
-        if(!this.validators.length) return true;
+        var result = true;
+        var errorMessage = null;
+        // check for native html5 validation
+        var rawField = this.field.get(0);
+        if(typeof rawField.validity != "undefined"){
+            if(!rawField.validity.valid){
+                result = false;
+                errorMessage = rawField.validationMessage;
+            }
+        }
+
+        // if no validators are given than skip
+        if(result && !this.validators.length) return true;
+
         this.validationBox.hide();
         this.field.removeClass("formtable-validation-error");
         var fieldValue = this.field.val();
@@ -77,7 +90,6 @@ function FormTableField(field, validators){
         }else if(!$.isArray(fieldValue)) {
             fieldValue = [fieldValue];
         }
-        var result = true;
         for(var i in this.validators){
             if(!result) break;
             var validator =  this.validators[i];
@@ -118,8 +130,11 @@ function FormTableField(field, validators){
                     });
                 break;
             }
+            if(!result){
+                errorMessage = validator.errorMessage;
+            }
         }
-        return result ? true : this.showError(validator.errorMessage);
+        return result ? true : this.showError(errorMessage);
     };
     this.showError = function(message){
         this.validationBox.html(message).show();

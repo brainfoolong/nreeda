@@ -20,7 +20,7 @@ class RDR_Home extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
-        needRole(NULL, true);
+        needRole(null, true);
 
         if(req()->isAjax()){
             if(needRole(RDR_User::ROLE_ADMIN)){
@@ -28,7 +28,7 @@ class RDR_Home extends CHOQ_View{
                     $logs = array();
                     db()->query("TRUNCATE TABLE ".db()->quote("RDR_Event"));
                     db()->query("DELETE FROM _choqled_metadata WHERE ".db()->quote("type")." = 'RDR_Event'");
-                    while($logs = RDR_Event::getByCondition(NULL, NULL, NULL, 1000)){
+                    while($logs = RDR_Event::getByCondition(null, null, null, 1000)){
                         db()->deleteMultiple($logs);
                     }
                 }
@@ -84,7 +84,7 @@ class RDR_Home extends CHOQ_View{
         <?php
         if(needRole(RDR_User::ROLE_ADMIN)){
             headline(t("dashboard.eventlog"));
-            $logs = RDR_Event::getByCondition(NULL, NULL, "-id", 50);
+            $logs = RDR_Event::getByCondition(null, null, "-id", 50);
             ?>
             <div id="eventlog">
                 <?php if($logs){?><input type="button" class="btn" value="<?php echo t("dashboard.clearlog")?>"/><?php }?>

@@ -69,7 +69,7 @@ class RDR_Event extends CHOQ_DB_Object{
     * @param array $params
     * @return self
     */
-    static function log($type, $params = NULL){
+    static function log($type, $params = null){
         $object = new self(db());
         $object->type = $type;
         if(is_array($params)){
@@ -87,7 +87,7 @@ class RDR_Event extends CHOQ_DB_Object{
         $time = RDR_Setting::get("maxeventlifetime")->value;
         if(!$time) $time = "- 1 day";
         while(true){
-            $tmp = self::getByCondition("createTime < {0}", array(dt("now $time")), NULL, 1000);
+            $tmp = self::getByCondition("createTime < {0}", array(dt("now $time")), null, 1000);
             if(!$tmp) break;
             db()->deleteMultiple($tmp);
         }

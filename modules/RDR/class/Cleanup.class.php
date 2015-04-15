@@ -40,7 +40,7 @@ class RDR_Cleanup{
         if(!$time) return;
         $updated = false;
         while(true){
-            $tmp = RDR_Entry::getByCondition("datetime < {0}", array(dt("now $time")), NULL, 1000);
+            $tmp = RDR_Entry::getByCondition("datetime < {0}", array(dt("now $time")), null, 1000);
             if(!$tmp) break;
             db()->deleteMultiple($tmp);
             $updated = true;
@@ -56,7 +56,7 @@ class RDR_Cleanup{
         $time = RDR_Setting::get("maxeventlifetime")->value;
         if(!$time) $time = "- 1 day";
         while(true){
-            $tmp = RDR_Event::getByCondition("createTime < {0}", array(dt("now $time")), NULL, 1000);
+            $tmp = RDR_Event::getByCondition("createTime < {0}", array(dt("now $time")), null, 1000);
             if(!$tmp) break;
             db()->deleteMultiple($tmp);
         }
@@ -69,7 +69,7 @@ class RDR_Cleanup{
         $feeds = RDR_Feed::getByQuery("
             SELECT t0.id FROM RDR_Feed as t0
             LEFT JOIN RDR_Category_feeds as t1 ON t1.v = t0.id
-            WHERE t1.id IS NULL
+            WHERE t1.id IS null
         ");
         if($feeds){
             db()->deleteMultiple($feeds);

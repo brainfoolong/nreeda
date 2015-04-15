@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * DB
@@ -97,9 +97,9 @@ abstract class CHOQ_DB{
     * Add a DB Connection
     *
     * @param string $connectUrl Anything parseable by parse_url()
-    * @param mixed $id NULL for default or a string id
+    * @param mixed $id null for default or a string id
     */
-    static function add($connectUrl, $id = NULL){
+    static function add($connectUrl, $id = null){
         if(is_null($id)) $id = "default";
         if(substr($connectUrl, 0, 10) == "sqlite3://"){
             $parsedUrl = array("scheme" => "sqlite3", "path" => substr($connectUrl, 10));
@@ -116,7 +116,7 @@ abstract class CHOQ_DB{
     * @param mixed $id The instance id
     * @return CHOQ_DB
     */
-    static function get($id = NULL){
+    static function get($id = null){
         if(is_null($id)) $id = "default";
         if($id instanceof CHOQ_DB) $id = $id->id;
         if(!isset(self::$pool[$id])) error("No such '$id' DB connection added");
@@ -196,13 +196,13 @@ abstract class CHOQ_DB{
     *  array is the value of the field 'name'
     * @return array
     */
-    abstract public function fetchColumn($query, $valueAsArrayIndex = NULL);
+    abstract public function fetchColumn($query, $valueAsArrayIndex = null);
 
     /**
     * Fetch first column value of first row
     *
     * @param string $query
-    * @return string|NULL
+    * @return string|null
     */
     abstract public function fetchOne($query);
 
@@ -215,7 +215,7 @@ abstract class CHOQ_DB{
     *  array is the value of the field 'name'
     * @return array[]
     */
-    abstract public function fetchAsAssoc($query, $valueAsArrayIndex = NULL);
+    abstract public function fetchAsAssoc($query, $valueAsArrayIndex = null);
 
     /**
     * Execute the query
@@ -263,16 +263,16 @@ abstract class CHOQ_DB{
     /**
     * Get object by id
     *
-    * @param string|NULL $type If NULL than auto detect the type
+    * @param string|null $type If null than auto detect the type
     * @param int $id
-    * @return CHOQ_DB_Object|NULL
+    * @return CHOQ_DB_Object|null
     */
     abstract public function getById($type, $id);
 
     /**
     * Get objects by ids
     *
-    * @param string|NULL $type If NULL than auto detect the type
+    * @param string|null $type If null than auto detect the type
     * @param array $id
     * @param bool $resort If true than the resulted array is in the same sort as the given ids
     * @return CHOQ_DB_Object[]
@@ -284,7 +284,7 @@ abstract class CHOQ_DB{
     * Search without any parameter will return all objects
     *
     * @param string $type
-    * @param string|NULL $condition If NULL than no condition is added (getAll)
+    * @param string|null $condition If null than no condition is added (getAll)
     *   To add a parameters placeholder add brackets with the parameters key - Example: {mykey}
     *   To quote fieldNames correctly enclose a fieldName with <fieldName>
     * @param mixed $parameters Can be a array of parameters, a single parameter or NULL
@@ -292,11 +292,11 @@ abstract class CHOQ_DB{
     *   Sort value must be a fieldName with a +/- prefix - Example: -id
     *   + means sort ASC
     *   - means sort DESC
-    * @param int|NULL $limit Define a limit for the query
-    * @param int|NULL $offset Define a offset for the query
+    * @param int|null $limit Define a limit for the query
+    * @param int|null $offset Define a offset for the query
     * @return CHOQ_DB_Object[]
     */
-    abstract public function getByCondition($type, $condition = NULL, $parameters = NULL, $sort = NULL, $limit = NULL, $offset = NULL);
+    abstract public function getByCondition($type, $condition = null, $parameters = null, $sort = null, $limit = null, $offset = null);
 
     /**
     * Get objects by own defined query

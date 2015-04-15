@@ -20,7 +20,7 @@ class RDR_BrowserScript extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
-        needRole(NULL, true);
+        needRole(null, true);
         view("RDR_BasicFrame", array("view" => $this));
     }
 

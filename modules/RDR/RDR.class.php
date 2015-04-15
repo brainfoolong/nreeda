@@ -36,7 +36,7 @@ class RDR extends CHOQ_Module{
     public function onInit(){
 
         html()->pageTitle = "nReeda - Web-based Open Source RSS/XML/Atom Feed Reader";
-        define("RDR_VERSION", "1.1.3");
+        define("RDR_VERSION", "1.2.0");
 
         $devFile = __DIR__."/_RDR.dev.php";
         $localFile = __DIR__."/_RDR.local.php";
@@ -107,18 +107,18 @@ function inNormalMode(){
 /**
 * Get the user instance
 *
-* @return RDR_User | NULL
+* @return RDR_User | null
 */
 function user(){
     if(!inNormalMode()) return;
-    if(RDR_User::$user !== NULL) return RDR_User::$user;
-    if(cookie("user-id") && cookie("user-id-salted") && cookie("user-id-salted") == saltedHash("sha256", cookie("user-id"))){
-        $user = RDR_User::getById(cookie("user.id"));
+    if(RDR_User::$user !== null) return RDR_User::$user;
+    if(session("user.id")){
+        $user = RDR_User::getById(session("user.id"));
         RDR_User::$user = $user;
         return $user;
     }
-    if(session("user.id")){
-        $user = RDR_User::getById(session("user.id"));
+    if(cookie("user-id") && cookie("user-id-salted") && cookie("user-id-salted") == saltedHash("sha256", cookie("user-id"))){
+        $user = RDR_User::getById(cookie("user-id"));
         RDR_User::$user = $user;
         return $user;
     }
@@ -141,7 +141,7 @@ function headline($title){
 * @param mixed $redirect
 * @return bool
 */
-function needRole($role = NULL, $redirect = false){
+function needRole($role = null, $redirect = false){
     if(RDR::$maintenanceMode){
         if($redirect) redirect(l("RDR_Maintenance"), 302);
         return false;
@@ -151,7 +151,7 @@ function needRole($role = NULL, $redirect = false){
     }
     $access = true;
     if(!user()) $access = false;
-    if($access && $role !== NULL && $role != user()->role) $access = false;
+    if($access && $role !== null && $role != user()->role) $access = false;
     if(!$access && $redirect) redirect(l(!user() ? "RDR_Login" : "RDR_Home"), 302);
     return $access;
 }

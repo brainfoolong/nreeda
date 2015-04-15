@@ -17,39 +17,19 @@ if(!defined("CHOQ")) die();
 class Form_Converter{
 
     /**
-    * The member
+    * The reference to the field
     *
-    * @var CHOQ_DB_TypeMember
+    * @var Form_Field
     */
-    public $member;
+    public $field;
 
     /**
-    * The db instance
+    * Constructor
     *
-    * @var CHOQ_DB
+    * @param Form_Field $field
     */
-    public $db;
-
-    /**
-    * Set converter to convert to the type of this member
-    *
-    * @param CHOQ_DB_TypeMember $member
-    * @return self
-    */
-    public function setMember(CHOQ_DB_TypeMember $member){
-        $this->member = $member;
-        return $this;
-    }
-
-    /**
-    * Set converters db connection if required for a type member
-    *
-    * @param CHOQ_DB $db
-    * @return self
-    */
-    public function setDb(CHOQ_DB $db){
-        $this->db = $db;
-        return $this;
+    public function __construct(Form_Field $field){
+        $this->field = $field;
     }
 
     /**
@@ -59,24 +39,24 @@ class Form_Converter{
     * @return mixed
     */
     public function convert($submittedValue){
-        if($submittedValue === NULL) return NULL;
-        $class = $this->member->fieldTypeArrayClass ? $this->member->fieldTypeArrayClass : $this->member->fieldTypeClass;
+        if($submittedValue === null) return null;
+        $class = $this->field->dbTypeMember->fieldTypeArrayClass ? $this->field->dbTypeMember->fieldTypeArrayClass : $this->field->dbTypeMember->fieldTypeClass;
         if(is_array($submittedValue)){
             if($class){
-                $value = $this->db->getByIds($class, $submittedValue);
-                if(!$value) return NULL;
+                $value = $this->field->dbObject->_db->getByIds($class, $submittedValue);
+                if(!$value) return null;
                 return $value;
             }
             foreach($submittedValue as $key => $value){
                 $submittedValue[$key] = $this->convert($value);
-                if($submittedValue[$key] === NULL) unset($submittedValue[$key]);
+                if($submittedValue[$key] === null) unset($submittedValue[$key]);
             }
             return $submittedValue;
         }else{
             if($class){
-                return $this->db->getById($class, $submittedValue);
+                return $this->field->dbObject->_db->getById($class, $submittedValue);
             }
-            return $this->member->convertFromDbValue($submittedValue);
+            return $this->field->dbTypeMember->convertFromDbValue($submittedValue);
         }
     }
 }

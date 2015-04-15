@@ -10,22 +10,13 @@
  * @link http://bfldev.com/nreeda
 **/
 
-if(!defined("CHOQ")) die();
 /**
-* A checkbox field
+* English translation
 */
-class Form_Field_Checkbox extends Form_Field_Input{
 
-    /**
-    * Get html string for this field
-    *
-    * @return string
-    */
-    public function getHtml(){
-        $this->attr->add("type", "checkbox");
-        $this->attr->add("value", "1");
-        if($this->defaultValue) $this->attr->setChecked(true);
-        return $this->htmlBeforeField.'<input '.$this->attr->getHtml().'/>'.$this->htmlAfterField.$this->getJsPart();
-    }
-}
-
+$translations = array(
+    "form.validation.required" => "This field could not be empty",
+    "form.validation.length" => "This value can have a max. length of %s characters",
+    "form.validation.integer" => "This value can only contain numbers",
+    "form.validation.double" => "This value can only contain numbers and decimal numbers"
+);

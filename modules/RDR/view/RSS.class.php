@@ -20,7 +20,7 @@ class RDR_RSS extends CHOQ_View{
     * Load the View
     */
     public function onLoad(){
-        needRole(NULL, true);
+        needRole(null, true);
 
         if(get("token")){
             $token = explode(".", get("token"));
@@ -47,6 +47,7 @@ class RDR_RSS extends CHOQ_View{
                     $offset = 0;
                     $limit = 50;
                     while(true){
+                        if(!$feeds) break;
                         $entries = RDR_Entry::getByCondition(
                             "feed IN {0} && id > {1}",
                             array($feeds, (int)user()->setting("init.entry")),
@@ -186,7 +187,7 @@ class RDR_RSS extends CHOQ_View{
     */
     public function getForm(){
         $form = new Form_Form("rss");
-        $form->attributes->add("method", "get");
+        $form->attr->add("method", "get");
 
         $validatorNumber = new Form_Validator_Regex();
         $validatorNumber->setErrorMessage(t("rss.10"));
@@ -194,31 +195,31 @@ class RDR_RSS extends CHOQ_View{
 
         $field = new Form_Field_Text("title", t("rss.4"));
         $field->setDefaultValue("nReeda RSS");
-        $field->attributes->add("style", "width:95%;");
+        $field->attr->add("style", "width:95%;");
         $form->addField($field);
         $validator = new Form_Validator_Required();
         $validator->setErrorMessage(t("form.validator.required"));
         $field->addValidator($validator);
 
         $field = new Form_Field_Text("desc", t("rss.5"));
-        $field->attributes->add("style", "width:95%;");
+        $field->attr->add("style", "width:95%;");
         $form->addField($field);
 
         $field = new Form_Field_Text("max", t("rss.6"));
         $field->setDefaultValue("50");
-        $field->attributes->add("size", 6);
+        $field->attr->add("size", 6);
         $field->addValidator($validatorNumber);
         $form->addField($field);
 
         $field = new Form_Field_Text("catmax", t("rss.7"));
         $field->setDefaultValue("0");
-        $field->attributes->add("size", 6);
+        $field->attr->add("size", 6);
         $field->addValidator($validatorNumber);
         $form->addField($field);
 
         $field = new Form_Field_Text("feedmax", t("rss.8"));
         $field->setDefaultValue("0");
-        $field->attributes->add("size", 6);
+        $field->attr->add("size", 6);
         $field->addValidator($validatorNumber);
         $form->addField($field);
 

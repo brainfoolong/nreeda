@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * View Base Class and Manager
@@ -33,7 +33,7 @@ abstract class CHOQ_View{
     /**
     * The parameters when url mapping is a regex
     *
-    * @var array|NULL
+    * @var array|null
     */
     public $parameters;
 
@@ -77,7 +77,7 @@ abstract class CHOQ_View{
     *   Only take effect when languageInUri is active
     * @return string
     */
-    static function linkToView($viewClass, $params = NULL, $priority = 0, $language = NULL){
+    static function linkToView($viewClass, $params = null, $priority = 0, $language = null){
         if(is_object($viewClass)) $viewClass = get_class($viewClass);
         if(!isset(self::$mapping[$priority][$viewClass])) error("No URL mapped to '$viewClass:$priority'");
         $data = self::$mapping[$priority][$viewClass];
@@ -94,7 +94,7 @@ abstract class CHOQ_View{
         $data[0] = str_replace("\\", "", $data[0]);
         $uri = "";
         if(url()->uriPrefix) $uri .= "/".url()->uriPrefix;
-        if(url()->languageInUri) $uri .= "/".($language !== NULL ? $language : CHOQ_LanguageManager::$language);
+        if(url()->languageInUri) $uri .= "/".($language !== null ? $language : CHOQ_LanguageManager::$language);
         $uri .= "/".ltrim($data[0], " /");
         if(!$uri) $uri = "/";
         return $uri;
@@ -104,8 +104,8 @@ abstract class CHOQ_View{
     * Load view for current uri
     */
     static function loadViewForCurrentUri(){
-        $viewClass = NULL;
-        $params = NULL;
+        $viewClass = null;
+        $params = null;
         $prefix = url()->uriPrefix;
         if($prefix){
             if(mb_substr(url()->getUri(), 1, mb_strlen($prefix)) != $prefix) error("URL does not match with the defined prefix '$prefix'");
@@ -149,7 +149,7 @@ abstract class CHOQ_View{
     * Get value from the url-regex parameters
     *
     * @param string $key
-    * @return string|NULL
+    * @return string|null
     */
     public function getParam($key){
         return arrayValue($this->parameters, $key);

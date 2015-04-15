@@ -35,16 +35,16 @@ class Form_Field_Select extends Form_Field{
     *
     * @param mixed $key
     * @param mixed $label
-    * @param mixed $attributes
+    * @param mixed $attr
     * @return self
     */
-    public function addOption($key, $label, $attributes = NULL){
+    public function addOption($key, $label, $attr = null){
         $key = (string)$key;
         $label = (string)$label;
         if(!isset($this->options[$key])) $this->options[$key] = new Form_Attributes();
         $attr = $this->options[$key];
         $attr->add("value", $key);
-        if(is_array($attributes)) foreach($attributes as $key => $value) $attr->add($key, $value);
+        if(is_array($attr)) foreach($attr as $key => $value) $attr->add($key, $value);
         $this->labels[$key] = $label;
         return $this;
     }
@@ -70,12 +70,12 @@ class Form_Field_Select extends Form_Field{
         if(!is_array($defaultValue)) $defaultValue = array($defaultValue);
         foreach($defaultValue as $key => $value) $defaultValue[(string)$key] = (string)$value;
 
-        $output = $this->htmlBeforeField.'<select '.$this->attributes->getHtml().'>';
+        $output = $this->htmlBeforeField.'<select '.$this->attr->getHtml().'>';
         foreach($this->options as $key => $attr){
             $overrideAttributes = array();
             $key = (string)$key;
             if(in_array($key, $defaultValue, true)) $overrideAttributes["selected"] = "selected";
-            $output .= "<option ".$attr->getHtml(NULL, $overrideAttributes).">".s($this->labels[$key])."</option>";
+            $output .= "<option ".$attr->getHtml(null, $overrideAttributes).">".s($this->labels[$key])."</option>";
         }
         $output .= "</select>".$this->htmlAfterField;
         $output .= $this->getJsPart();

@@ -9,7 +9,7 @@
  * @product nReeda - Web-based Open Source RSS/XML/Atom Feed Reader
  * @link http://bfldev.com/nreeda
 **/
-
+ 
 if(!defined("CHOQ")) die();
 /**
 * Mysql DB Handler
@@ -78,7 +78,7 @@ class CHOQ_DB_Mysql extends CHOQ_DB_Sql{
     *  array is the value of the field 'name'
     * @return array[]
     */
-    public function fetchAsAssoc($query, $valueAsArrayIndex = NULL){
+    public function fetchAsAssoc($query, $valueAsArrayIndex = null){
         $fetch = array();
         $this->query($query);
         while($row = $this->lastResult->fetch_assoc()){
@@ -110,7 +110,7 @@ class CHOQ_DB_Mysql extends CHOQ_DB_Sql{
     * @throws CHOQ_Exception
     * @param string $query
     */
-    public function testError($query = NULL){
+    public function testError($query = null){
         if($this->mysqli->connect_error){
             error("Mysql Connect Error for DBID '".$this->id."'");
         }

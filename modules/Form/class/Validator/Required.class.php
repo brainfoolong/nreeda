@@ -17,6 +17,13 @@ if(!defined("CHOQ")) die();
 class Form_Validator_Required extends Form_Validator{
 
     /**
+    * Constructor
+    */
+    public function __construct(){
+        $this->setErrorMessage(t("form.validation.required"));
+    }
+
+    /**
     * Trim values before validation
     *
     * @param mixed $trimChar
@@ -41,7 +48,7 @@ class Form_Validator_Required extends Form_Validator{
             }
             return true;
         }
-        if($this->getOption("trim") !== NULL) $submittedValue = trim($submittedValue, $this->getOption("trim"));
+        if($this->getOption("trim") !== null) $submittedValue = trim($submittedValue, $this->getOption("trim"));
         if(!mb_strlen($submittedValue)) return false;
         return true;
     }

@@ -28,7 +28,7 @@ class Form_Form{
     *
     * @var Form_Attributes
     */
-    public $attributes;
+    public $attr;
 
     /**
     * The fields
@@ -44,7 +44,7 @@ class Form_Form{
     * @return Form
     */
     public function __construct($name){
-        $this->attributes = new Form_Attributes(array("name" => $name, "method" => "post", "action" => "", "id"=> "form-".$name));
+        $this->attr = new Form_Attributes(array("name" => $name, "method" => "post", "action" => "", "id"=> "form-".$name));
     }
 
     /**
@@ -53,7 +53,7 @@ class Form_Form{
     * @return self
     */
     public function enableFileUpload(){
-        $this->attributes->add("enctype", "multipart/form-data");
+        $this->attr->add("enctype", "multipart/form-data");
         return $this;
     }
 
@@ -89,20 +89,23 @@ class Form_Form{
     */
     public function setObjectMembersBySubmittedValues(CHOQ_DB_Object $object){
         foreach($this->fields as $field){
-            if($field->member){
+            # if field was disabled than ignore it
+            if($field->attr->get("disabled")) continue;
+
+            if($field->dbTypeMember){
                 $value = $field->getSubmittedValue(true);
                 if(is_array($value)){
-                    $object->{$field->member->name} = $value;
+                    $object->{$field->dbTypeMember->name} = $value;
                 }else{
                     preg_match("~\[(.*?)\]~i", $field->name, $arrayKey);
                     if($arrayKey){
                         $key = $arrayKey[1];
-                        $object->remove($field->member->name, $key);
-                        if($value !== NULL){
-                            $object->add($field->member->name, $value, $key);
+                        $object->remove($field->dbTypeMember->name, $key);
+                        if($value !== null){
+                            $object->add($field->dbTypeMember->name, $value, $key);
                         }
                     }else{
-                        $object->{$field->member->name} = $value;
+                        $object->{$field->dbTypeMember->name} = $value;
                     }
                 }
             }
