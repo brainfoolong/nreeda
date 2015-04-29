@@ -6,7 +6,7 @@ Just collect thousends of news from around the globe. nReeda will bring it all t
 Demo
 ==
 The best way to see how this application works is with our demo login.
-Head to http://nreeda.bfldev.com/
+Head to http://nreeda.leiwandsoft.at/
 User: demo
 PW: demo 
 
